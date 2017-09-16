@@ -1,0 +1,3 @@
+Uma\Domain\Model\User:
+  User (template):
+    __construct: ['<shuffle("abcdefghijklmn")>', '<shuffle("abcdefghijklmn")>']
