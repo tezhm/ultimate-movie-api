@@ -7,7 +7,7 @@ use PHPUnit_Framework_TestCase;
 use Uma\Domain\Exceptions\DomainException;
 
 /**
- * Unit tests for the Genre entity.
+ * Unit tests for the Actor entity.
  *
  * @package Uma\Domain\Model;
  */

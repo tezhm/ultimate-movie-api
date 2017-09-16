@@ -141,7 +141,7 @@ class Genre extends PersistentId
     }
 
     /**
-     * Returns whether the given actor currently exists within this genre.
+     * Returns array containing position of actor if exists.
      *
      * @param Actor $actor
      * @return array
@@ -156,7 +156,7 @@ class Genre extends PersistentId
     }
 
     /**
-     * Returns whether the given actor currently exists within this genre.
+     * Returns array containing position of movie if exists.
      *
      * @param Movie $movie
      * @return array
