@@ -65,7 +65,7 @@ class LoginController extends Controller
             $token = $user->getApiToken();
         });
 
-        $response = ['token' => $token];
+        $response = ['api_token' => $token];
         return response(json_encode($response), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 }
