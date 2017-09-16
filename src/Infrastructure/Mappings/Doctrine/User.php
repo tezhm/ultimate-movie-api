@@ -30,7 +30,7 @@ class User extends EntityMapping
                 ->length(255);
         $builder->string('password')
                 ->length(255);
-        $builder->string('apiToken')
+        $builder->string('api_token')
                 ->nullable(true);
 
         // Indexes

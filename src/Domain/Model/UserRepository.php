@@ -11,10 +11,10 @@ interface UserRepository
     /**
      * Retrieve an User by name.
      *
-     * @param string $name
+     * @param string $username
      * @return User|null
      */
-    public function showByName(string $name): ?User;
+    public function showByUsername(string $username): ?User;
 
     /**
      * Persist an User.

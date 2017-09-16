@@ -16,7 +16,7 @@ class User extends PersistentId implements Authenticatable
     /** @var string */
     private $password;
     /** @var string */
-    private $apiToken;
+    private $api_token;
 
     /**
      * User constructor.
@@ -28,7 +28,7 @@ class User extends PersistentId implements Authenticatable
     {
         $this->setUsername($username);
         $this->setPassword($password);
-        $this->apiToken = null;
+        $this->api_token = null;
     }
 
     /**
@@ -37,7 +37,7 @@ class User extends PersistentId implements Authenticatable
     public function generateApiToken()
     {
         // Not cryptographically safe - would normally use a domain service to generate pseudo random values
-        $this->apiToken = str_random(32);
+        $this->api_token = str_random(32);
     }
 
     /**
@@ -47,7 +47,7 @@ class User extends PersistentId implements Authenticatable
      */
     public function getApiToken(): ?string
     {
-        return $this->apiToken;
+        return $this->api_token;
     }
 
     /**
