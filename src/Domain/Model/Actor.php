@@ -8,7 +8,7 @@ use Uma\Domain\Exceptions\DomainException;
 /**
  * Details of an actor.
  *
- * @package Ultimate\Movie\Api
+ * @package Uma\Domain\Model
  */
 class Actor extends PersistentId
 {
