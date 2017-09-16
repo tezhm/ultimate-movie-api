@@ -35,5 +35,6 @@ class User extends EntityMapping
 
         // Indexes
         $builder->unique('username');
+        $builder->unique('apiToken');
     }
 }
