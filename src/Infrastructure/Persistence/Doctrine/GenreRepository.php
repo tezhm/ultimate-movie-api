@@ -47,6 +47,14 @@ class GenreRepository implements IGenreRepository
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function remove(Genre $genre)
+    {
+        $this->entityManager->remove($genre);
+    }
+
+    /**
      * Retrieves the entity persister for Genre entities.
      *
      * @return EntityPersister

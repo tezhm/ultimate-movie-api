@@ -22,4 +22,11 @@ interface ActorRepository
      * @param Actor $actor
      */
     public function add(Actor $actor);
+
+    /**
+     * Removes an actor.
+     *
+     * @param Actor $actor
+     */
+    public function remove(Actor $actor);
 }

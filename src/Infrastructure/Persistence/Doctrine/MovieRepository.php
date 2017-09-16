@@ -41,9 +41,17 @@ class MovieRepository implements IMovieRepository
     /**
      * {@inheritdoc}
      */
-    public function add(Movie $Movie)
+    public function add(Movie $movie)
     {
-        $this->entityManager->persist($Movie);
+        $this->entityManager->persist($movie);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function remove(Movie $movie)
+    {
+        $this->entityManager->remove($movie);
     }
 
     /**

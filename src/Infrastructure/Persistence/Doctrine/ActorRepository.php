@@ -47,6 +47,14 @@ class ActorRepository implements IActorRepository
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function remove(Actor $actor)
+    {
+        $this->entityManager->remove($actor);
+    }
+
+    /**
      * Retrieves the entity persister for Actor entities.
      *
      * @return EntityPersister

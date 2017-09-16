@@ -19,7 +19,14 @@ interface MovieRepository
     /**
      * Persist an Movie.
      *
-     * @param Movie $Movie
+     * @param Movie $movie
      */
-    public function add(Movie $Movie);
+    public function add(Movie $movie);
+
+    /**
+     * Removes an Movie.
+     *
+     * @param Movie $movie
+     */
+    public function remove(Movie $movie);
 }

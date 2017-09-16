@@ -22,4 +22,11 @@ interface GenreRepository
      * @param Genre $Genre
      */
     public function add(Genre $Genre);
+
+    /**
+     * Removes an Genre.
+     *
+     * @param Genre $genre
+     */
+    public function remove(Genre $genre);
 }
