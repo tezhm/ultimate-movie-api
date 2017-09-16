@@ -1,0 +1,11 @@
+include:
+  - ../../../../../src/Infrastructure/Fixtures/Genre.yml
+  - ../../../../../src/Infrastructure/Fixtures/Actor.yml
+
+Uma\Domain\Model\Actor:
+  AddedActor (extends Actor):
+  NewActor (extends Actor):
+
+Uma\Domain\Model\Genre:
+  Genre (extends Genre):
+    addActor: ['@AddedActor']

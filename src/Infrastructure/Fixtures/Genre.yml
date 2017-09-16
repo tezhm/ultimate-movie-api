@@ -1,0 +1,3 @@
+Uma\Domain\Model\Genre:
+  Genre (template):
+    __construct: ['<text(255)>']
