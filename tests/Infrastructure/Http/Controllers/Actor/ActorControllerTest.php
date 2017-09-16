@@ -11,7 +11,7 @@ use Uma\LumenTest;
  *
  * @package Uma\Infrastructure\Http\Controllers\Actor
  */
-class ActorTest extends LumenTest
+class ActorControllerTest extends LumenTest
 {
     const FIXTURE_DIR = __DIR__ . '/Fixtures/';
 
