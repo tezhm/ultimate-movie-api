@@ -23,7 +23,7 @@ class ActorController extends Controller
     private $actorRepository;
 
     /**
-     * Create a new login controller instance.
+     * Create a new actor controller instance.
      *
      * @param EntityManagerInterface $entityManager
      * @param ActorRepository $actorRepository
