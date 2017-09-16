@@ -92,6 +92,19 @@ class GenreTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedActors, $testClass->getActors());
     }
 
+    public function testGetActorsFromMovies()
+    {
+        /** @var Genre[]|Actor[]|Movie[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'GetActorsFromMovies.yml');
+        $fixtures['Movie']->addActor('another character', $fixtures['Actor1']);
+
+        $testClass = $fixtures['Genre'];
+        $testClass->addActor($fixtures['Actor2']);
+
+        $expectedActors = [$fixtures['DuplicateActor'], $fixtures['Actor1'], $fixtures['Actor2']];
+        $this->assertEquals($expectedActors, $testClass->getActors());
+    }
+
     public function testAddActorAlreadyExists()
     {
         /** @var Genre[]|Actor[] $fixtures */

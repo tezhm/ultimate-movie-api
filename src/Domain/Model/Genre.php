@@ -54,7 +54,15 @@ class Genre extends PersistentId
      */
     public function getActors(): array
     {
-        return $this->actors;
+        $movieActors = [];
+
+        foreach ($this->movies as $movie)
+        {
+            $movieActors = array_merge($movieActors, array_values($movie->getActors()));
+        }
+
+        $allActors = array_merge($movieActors, $this->actors);
+        return $this->getUniqueActors($allActors);
     }
 
     /**
@@ -81,7 +89,7 @@ class Genre extends PersistentId
      */
     public function addMovie(Movie $movie)
     {
-        if (count($this->searchForMovie($movie)) > 0)
+        if (count($this->searchForMovie($movie, $this->movies)) > 0)
         {
             throw new DomainException('Movie already within genre');
         }
@@ -96,7 +104,7 @@ class Genre extends PersistentId
      */
     public function addActor(Actor $actor)
     {
-        if (count($this->searchForActor($actor)) > 0)
+        if (count($this->searchForActor($actor, $this->actors)) > 0)
         {
             throw new DomainException('Actor already within genre');
         }
@@ -111,7 +119,7 @@ class Genre extends PersistentId
      */
     public function removeMovie(Movie $movie)
     {
-        $search = $this->searchForMovie($movie);
+        $search = $this->searchForMovie($movie, $this->movies);
 
         if (count($search) === 0)
         {
@@ -129,7 +137,7 @@ class Genre extends PersistentId
      */
     public function removeActor(Actor $actor)
     {
-        $search = $this->searchForActor($actor);
+        $search = $this->searchForActor($actor, $this->actors);
 
         if (count($search) === 0)
         {
@@ -143,30 +151,55 @@ class Genre extends PersistentId
     /**
      * Returns array containing position of actor if exists.
      *
-     * @param Actor $actor
+     * @param Actor   $actor
+     * @param Actor[] $haystack
      * @return array
      */
-    private function searchForActor(Actor $actor): array
+    private function searchForActor(Actor $actor, array $haystack): array
     {
         $predicate = function(Actor $current) use($actor)
         {
             return ($current->getName() === $actor->getName());
         };
-        return array_filter($this->getActors(), $predicate);
+        return array_filter($haystack, $predicate);
     }
 
     /**
      * Returns array containing position of movie if exists.
      *
-     * @param Movie $movie
+     * @param Movie   $movie
+     * @param Movie[] $haystack
      * @return array
      */
-    private function searchForMovie(Movie $movie): array
+    private function searchForMovie(Movie $movie, array $haystack): array
     {
         $predicate = function(Movie $current) use($movie)
         {
             return ($current->getName() === $movie->getName());
         };
-        return array_filter($this->getMovies(), $predicate);
+        return array_filter($haystack, $predicate);
+    }
+
+    /**
+     * Removes duplicate Actor values.
+     *
+     * @param Actor[] $actors
+     * @return array
+     */
+    private function getUniqueActors(array $actors): array
+    {
+        $result = [];
+
+        foreach ($actors as $actor)
+        {
+            if (array_key_exists($actor->getName(), $result))
+            {
+                continue;
+            }
+
+            $result[$actor->getName()] = $actor;
+        }
+
+        return array_values($result);
     }
 }
