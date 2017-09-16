@@ -1,0 +1,28 @@
+{
+    "name": "ultimate-movie-api",
+    "description": "Some movie api with great movie categorisation",
+    "keywords": ["ultimate", "great", "super"],
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~5.0",
+        "mockery/mockery": "~0.9",
+        "nelmio/alice": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Uma\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Uma\\": "tests/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
