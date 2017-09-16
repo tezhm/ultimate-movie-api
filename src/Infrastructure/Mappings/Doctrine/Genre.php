@@ -36,12 +36,14 @@ class Genre extends EntityMapping
                 ->joinTable('genre_movies')
                 ->joinColumn('genre_id', 'id')
                 ->inverseKey('movie_id', 'id')
+                ->fetchEager()
                 ->cascadePersist();
 
         $builder->manyToMany(ActorEntity::class, 'actors')
                 ->joinTable('genre_actors')
                 ->joinColumn('genre_id', 'id')
                 ->inverseKey('actor_id', 'id')
+                ->fetchEager()
                 ->cascadePersist();
 
         // Indexes
