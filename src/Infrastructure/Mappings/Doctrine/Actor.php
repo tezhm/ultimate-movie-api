@@ -3,21 +3,21 @@ namespace Uma\Infrastructure\Mappings\Doctrine;
 
 use LaravelDoctrine\Fluent\EntityMapping;
 use LaravelDoctrine\Fluent\Fluent;
-use Uma\Domain\Model\User as UserEntity;
+use Uma\Domain\Model\Actor as ActorEntity;
 
 /**
- * Doctrine mappings for User entity
+ * Doctrine mappings for Actor entity
  *
  * @package Uma\Infrastructure\Mappings\Doctrine
  */
-class User extends EntityMapping
+class Actor extends EntityMapping
 {
     /**
      * {@inheritdoc}
      */
     public function mapFor()
     {
-        return UserEntity::class;
+        return ActorEntity::class;
     }
 
     /**
@@ -26,15 +26,16 @@ class User extends EntityMapping
     public function map(Fluent $builder)
     {
         // Locals
-        $builder->string('username')
+        $builder->string('name')
                 ->length(255);
-        $builder->string('password')
-                ->length(255);
-        $builder->string('apiToken')
+        $builder->dateTime('birth');
+        $builder->string('bio')
+                ->length(3000)
+                ->nullable(true);
+        $builder->blob('image')
                 ->nullable(true);
 
         // Indexes
-        $builder->unique('username');
-        $builder->unique('api_token');
+        $builder->unique('name');
     }
 }

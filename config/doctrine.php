@@ -25,6 +25,9 @@ return [
             'connection'    => env('DB_CONNECTION', 'uma'),
             'mappings'      => [
                 Uma\Infrastructure\Mappings\Doctrine\PersistentId::class,
+                Uma\Infrastructure\Mappings\Doctrine\Actor::class,
+                Uma\Infrastructure\Mappings\Doctrine\Genre::class,
+                Uma\Infrastructure\Mappings\Doctrine\Movie::class,
                 Uma\Infrastructure\Mappings\Doctrine\User::class,
             ],
             'repository'    => Doctrine\ORM\EntityRepository::class,
