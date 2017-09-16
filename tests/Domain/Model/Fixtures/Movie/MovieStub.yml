@@ -1,0 +1,5 @@
+include:
+  - ../../../../../src/Infrastructure/Fixtures/Movie.yml
+
+Uma\Domain\Model\Movie:
+  Movie (extends Movie):

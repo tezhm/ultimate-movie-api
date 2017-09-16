@@ -1,0 +1,11 @@
+include:
+  - ../../../../../src/Infrastructure/Fixtures/Actor.yml
+  - ../../../../../src/Infrastructure/Fixtures/Movie.yml
+
+Uma\Domain\Model\Actor:
+  AddedActor (extends Actor):
+  NewActor (extends Actor):
+
+Uma\Domain\Model\Movie:
+  Movie (extends Movie):
+    addActor: ['@AddedActor']

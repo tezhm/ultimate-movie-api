@@ -48,7 +48,7 @@ class Movie extends PersistentId
      *
      * @return Genre
      */
-    public function getGenre(): Genre
+    public function getGenre(): ?Genre
     {
         return $this->genre;
     }
@@ -66,12 +66,19 @@ class Movie extends PersistentId
     /**
      * Returns the average rating.
      *
-     * @return int
+     * @return float
      */
-    public function getRating(): int
+    public function getRating(): float
     {
-        // TODO: check empty array behaviour
-        return array_sum($this->rating) / count($this->rating);
+        $count = count($this->rating);
+
+        if ($count === 0)
+        {
+            return 0;
+        }
+
+        $average = array_sum($this->rating) / count($this->rating);
+        return round($average, 1);
     }
 
     /**
@@ -109,5 +116,110 @@ class Movie extends PersistentId
         }
 
         $this->name = $name;
+    }
+
+    /**
+     * Sets the genre of this movie.
+     *
+     * @param Genre $genre
+     */
+    public function setGenre(Genre $genre)
+    {
+        $this->genre = $genre;
+    }
+
+    /**
+     * Attempts to add the actor to this movie.
+     *
+     * @param Actor $actor
+     */
+    public function addActor(Actor $actor)
+    {
+        if (count($this->searchForActor($actor)) > 0)
+        {
+            throw new DomainException('Actor already within movie');
+        }
+
+        $this->actors[] = $actor;
+    }
+
+    /**
+     * Attempts to remove the actor from this movie.
+     *
+     * @param Actor $actor
+     */
+    public function removeActor(Actor $actor)
+    {
+        $search = $this->searchForActor($actor);
+
+        if (count($search) === 0)
+        {
+            throw new DomainException('Actor not within movie');
+        }
+
+        reset($search);
+        unset($this->actors[key($search)]);
+    }
+
+    /**
+     * Sets the rating given by a user.
+     *
+     * @param string $user
+     * @param int $rating
+     */
+    public function addRating(string $user, int $rating)
+    {
+        if ($rating < 0 || $rating > 5)
+        {
+            throw new DomainException('Rating must be integer between 0 and 5 (inclusive)');
+        }
+
+        $this->rating[$user] = $rating;
+    }
+
+    /**
+     * Provides 3000 characters for description.
+     *
+     * @param string|null $description
+     */
+    public function setDescription(?string $description)
+    {
+        if ($description !== null && strlen($description) > 3000)
+        {
+            throw new DomainException('Movie description too long');
+        }
+
+        $this->description = $description;
+    }
+
+    /**
+     * Allows up to ~500kB images.
+     *
+     * @param string|null $image
+     */
+    public function setImage(?string $image)
+    {
+        // Could run the image through an image normalisation service
+        if ($image !== null && strlen($image) > 512000)
+        {
+            throw new DomainException('Movie image too large');
+        }
+
+        $this->image = $image;
+    }
+
+    /**
+     * Returns whether the given actor currently exists within this movie.
+     *
+     * @param Actor $actor
+     * @return array
+     */
+    private function searchForActor(Actor $actor): array
+    {
+        $predicate = function(Actor $current) use($actor)
+        {
+            return ($current->getName() === $actor->getName());
+        };
+        return array_filter($this->getActors(), $predicate);
     }
 }

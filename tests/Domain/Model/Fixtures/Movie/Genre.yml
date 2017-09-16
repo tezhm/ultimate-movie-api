@@ -1,0 +1,9 @@
+include:
+  - ../../../../../src/Infrastructure/Fixtures/Genre.yml
+  - ../../../../../src/Infrastructure/Fixtures/Movie.yml
+
+Uma\Domain\Model\Genre:
+  Genre (extends Genre):
+
+Uma\Domain\Model\Movie:
+  Movie (extends Movie):
