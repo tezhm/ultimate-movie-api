@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 try {
-    (new Dotenv\Dotenv(__DIR__ . '/blog/'))->load();
+    (new Dotenv\Dotenv(__DIR__ . '/../'))->load();
 } catch (Dotenv\Exception\InvalidPathException $e) {
     //
 }
@@ -20,12 +20,8 @@ try {
 */
 
 $app = new Laravel\Lumen\Application(
-    realpath(__DIR__ . '/blog/')
+    realpath(__DIR__ . '/../')
 );
-
-// $app->withFacades();
-
-// $app->withEloquent();
 
 /*
 |--------------------------------------------------------------------------
@@ -78,9 +74,7 @@ $app->singleton(
 |
 */
 
-// $app->register(App\Providers\AppServiceProvider::class);
-// $app->register(App\Providers\AuthServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
@@ -98,5 +92,16 @@ $app->router->group([
 ], function ($router) {
     require __DIR__ . '/../src/Infrastructure/Routes/web.php';
 });
+
+/*
+|--------------------------------------------------------------------------
+| Load Configuration files for lumen
+|--------------------------------------------------------------------------
+|
+| Need to load up the custom configuration files
+|
+*/
+$app->configure('database');
+$app->configure('doctrine');
 
 return $app;

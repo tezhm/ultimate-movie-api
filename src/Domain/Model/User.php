@@ -1,31 +1,30 @@
 <?php declare(strict_types=1);
 namespace Uma\Domain\Model;
 
-use Illuminate\Auth\Authenticatable;
-use Laravel\Lumen\Auth\Authorizable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
-
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+/**
+ * Contains user information.
+ *
+ * @package Uma\Domain\Model
+ */
+class User extends PersistentId
 {
-    use Authenticatable, Authorizable;
+    /** @var string */
+    private $username;
+    /** @var string */
+    private $password;
+    /** @var string */
+    private $apiToken;
 
     /**
-     * The attributes that are mass assignable.
+     * User constructor.
      *
-     * @var array
+     * @param string $username
+     * @param string $password
      */
-    protected $fillable = [
-        'name', 'email',
-    ];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password',
-    ];
+    public function __construct(string $username, string $password)
+    {
+        $this->username = $username;
+        $this->password = $password;
+        $this->apiToken = null;
+    }
 }
