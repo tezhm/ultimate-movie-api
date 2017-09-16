@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 namespace Uma\Infrastructure\Http\Controllers\Auth;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Factory as Auth;
@@ -18,16 +18,16 @@ class LoginController extends Controller
 {
     /** @var Auth */
     private $auth;
-    /** @var EntityManager */
+    /** @var EntityManagerInterface */
     private $entityManager;
 
     /**
      * Create a new login controller instance.
      *
-     * @param Auth $auth
-     * @param EntityManager $entityManager
+     * @param Auth                   $auth
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(Auth $auth, EntityManager $entityManager)
+    public function __construct(Auth $auth, EntityManagerInterface $entityManager)
     {
         $this->auth = $auth;
         $this->entityManager = $entityManager;
