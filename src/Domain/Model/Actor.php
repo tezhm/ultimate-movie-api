@@ -3,6 +3,7 @@ namespace Uma\Domain\Model;
 
 use DateTime;
 use DateTimeZone;
+use JsonSerializable;
 use Uma\Domain\Exceptions\DomainException;
 
 /**
@@ -10,7 +11,7 @@ use Uma\Domain\Exceptions\DomainException;
  *
  * @package Uma\Domain\Model
  */
-class Actor extends PersistentId
+class Actor extends PersistentId implements JsonSerializable
 {
     /** @var string */
     private $name;
@@ -137,5 +138,18 @@ class Actor extends PersistentId
         }
 
         $this->image = $image;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'name'  => $this->name,
+            'birth' => $this->birth->format(DateTime::ATOM),
+            'bio'   => $this->bio,
+            'image' => $this->image,
+        ];
     }
 }

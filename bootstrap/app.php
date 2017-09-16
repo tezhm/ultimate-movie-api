@@ -55,13 +55,9 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//    App\Http\Middleware\ExampleMiddleware::class
-// ]);
-
-// $app->routeMiddleware([
-//     'auth' => App\Http\Middleware\Authenticate::class,
-// ]);
+$app->routeMiddleware([
+    'auth' => Uma\Infrastructure\Http\Middleware\Authenticate::class,
+]);
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +73,12 @@ $app->singleton(
 $app->register(Illuminate\Cookie\CookieServiceProvider::class);
 $app->register(Illuminate\Session\SessionServiceProvider::class);
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
+
+$app->register(Uma\Infrastructure\Providers\ActorProvider::class);
+$app->register(Uma\Infrastructure\Providers\DomainProvider::class);
+$app->register(Uma\Infrastructure\Providers\GenreProvider::class);
+$app->register(Uma\Infrastructure\Providers\MovieProvider::class);
+$app->register(Uma\Infrastructure\Providers\UserProvider::class);
 
 /*
 |--------------------------------------------------------------------------
