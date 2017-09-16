@@ -74,6 +74,8 @@ $app->singleton(
 |
 */
 
+$app->register(Illuminate\Cookie\CookieServiceProvider::class);
+$app->register(Illuminate\Session\SessionServiceProvider::class);
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 
 /*
@@ -88,7 +90,7 @@ $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers',
+    'namespace' => 'Uma\Infrastructure\Http\Controllers',
 ], function ($router) {
     require __DIR__ . '/../src/Infrastructure/Routes/web.php';
 });
@@ -101,7 +103,9 @@ $app->router->group([
 | Need to load up the custom configuration files
 |
 */
+$app->configure('auth');
 $app->configure('database');
 $app->configure('doctrine');
+$app->configure('session');
 
 return $app;

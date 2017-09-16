@@ -14,3 +14,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+// User authentication
+$router->post('login', ['uses' => 'Auth\LoginController@login']);
+$router->post('logout', ['uses' => 'Auth\LoginController@logout']);
