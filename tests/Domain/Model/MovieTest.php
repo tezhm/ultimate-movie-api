@@ -76,9 +76,27 @@ class MovieTest extends PHPUnit_Framework_TestCase
         $fixtures = $this->alice->load(self::FIXTURE_DIR . 'Actors.yml');
 
         $testClass = $fixtures['Movie'];
-        $testClass->addActor($fixtures['NewActor']);
+        $testClass->addActor('william spearshake', $fixtures['NewActor']);
 
-        $expectedActors = [$fixtures['AddedActor'], $fixtures['NewActor']];
+        $expectedActors = [
+            'Barry Cumberbatch'  => $fixtures['AddedActor'],
+            'william spearshake' => $fixtures['NewActor'],
+        ];
+        $this->assertEquals($expectedActors, $testClass->getActors());
+    }
+
+    public function testAddActorDifferentRole()
+    {
+        /** @var Movie[]|Actor[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'Actors.yml');
+
+        $testClass = $fixtures['Movie'];
+        $testClass->addActor('william spearshake', $fixtures['AddedActor']);
+
+        $expectedActors = [
+            'Barry Cumberbatch'  => $fixtures['AddedActor'],
+            'william spearshake' => $fixtures['AddedActor'],
+        ];
         $this->assertEquals($expectedActors, $testClass->getActors());
     }
 
@@ -91,7 +109,7 @@ class MovieTest extends PHPUnit_Framework_TestCase
         $this->expectExceptionMessage('Actor already within movie');
 
         $testClass = $fixtures['Movie'];
-        $testClass->addActor($fixtures['AddedActor']);
+        $testClass->addActor('Barry Cumberbatch', $fixtures['AddedActor']);
     }
 
     public function testRemoveActor()

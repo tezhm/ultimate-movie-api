@@ -16,6 +16,8 @@ class Movie extends PersistentId
     private $genre;
     /** @var Actor[] */
     private $actors = [];
+    /** @var string[] */
+    private $characters = [];
     /** @var int[] */
     private $rating = [];
     /** @var string|null */
@@ -60,7 +62,14 @@ class Movie extends PersistentId
      */
     public function getActors(): array
     {
-        return $this->actors;
+        $actors = [];
+
+        for ($i = 0; $i < count($this->characters); ++$i)
+        {
+            $actors[$this->characters[$i]] = $this->actors[$i];
+        }
+
+        return $actors;
     }
 
     /**
@@ -131,16 +140,20 @@ class Movie extends PersistentId
     /**
      * Attempts to add the actor to this movie.
      *
-     * @param Actor $actor
+     * @param string $character
+     * @param Actor  $actor
      */
-    public function addActor(Actor $actor)
+    public function addActor(string $character, Actor $actor)
     {
-        if (count($this->searchForActor($actor)) > 0)
+        $roles = $this->searchForRoles($actor);
+
+        if (in_array($character, $roles, true))
         {
             throw new DomainException('Actor already within movie');
         }
 
         $this->actors[] = $actor;
+        $this->characters[] = $character;
     }
 
     /**
@@ -150,15 +163,18 @@ class Movie extends PersistentId
      */
     public function removeActor(Actor $actor)
     {
-        $search = $this->searchForActor($actor);
+        $search = $this->searchForRoles($actor);
 
         if (count($search) === 0)
         {
             throw new DomainException('Actor not within movie');
         }
 
-        reset($search);
-        unset($this->actors[key($search)]);
+        foreach (array_keys($search) as $key)
+        {
+            unset($this->actors[$key]);
+            unset($this->characters[$key]);
+        }
     }
 
     /**
@@ -220,6 +236,18 @@ class Movie extends PersistentId
         {
             return ($current->getName() === $actor->getName());
         };
-        return array_filter($this->getActors(), $predicate);
+        return array_filter($this->actors, $predicate);
+    }
+
+    /**
+     * Returns the roles played by actor.
+     *
+     * @param Actor $actor
+     * @return array
+     */
+    private function searchForRoles(Actor $actor): array
+    {
+        $positions = $this->searchForActor($actor);
+        return array_intersect_key($this->characters, $positions);
     }
 }

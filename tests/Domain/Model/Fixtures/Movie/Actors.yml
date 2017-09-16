@@ -8,4 +8,4 @@ Uma\Domain\Model\Actor:
 
 Uma\Domain\Model\Movie:
   Movie (extends Movie):
-    addActor: ['@AddedActor']
+    addActor: ['Barry Cumberbatch', '@AddedActor']
