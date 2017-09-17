@@ -1,0 +1,3 @@
+Uma\Domain\Model\User:
+  User:
+    __construct: ['apitest', 'password123']

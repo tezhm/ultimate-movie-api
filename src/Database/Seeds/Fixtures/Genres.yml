@@ -1,0 +1,8 @@
+include:
+  - ../../../Infrastructure/Fixtures/Genre.yml
+
+Uma\Domain\Model\Genre:
+  Genre1 (extends Genre):
+    name: Action
+  Genre2 (extends Genre):
+    name: Comedy

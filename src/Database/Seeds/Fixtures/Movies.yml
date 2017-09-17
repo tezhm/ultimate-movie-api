@@ -1,0 +1,10 @@
+include:
+  - ../../../Infrastructure/Fixtures/Movie.yml
+
+Uma\Domain\Model\Movie:
+  Movie1 (extends Movie):
+    name: Transformers
+    description: An ancient struggle between two Cybertronian races, the heroic Autobots and the evil Decepticons, comes to Earth, with a clue to the ultimate power held by a teenager.
+  Movie2 (extends Movie):
+    name: 'Austin Powers: The Spy Who Shagged Me'
+    description: Dr. Evil is back...and has invented a new time machine that allows him to go back to the 60s and steal Austin Powers's mojo, inadvertently leaving him "shagless".
