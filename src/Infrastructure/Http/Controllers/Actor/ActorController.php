@@ -128,4 +128,13 @@ class ActorController extends Controller
 
         return response(json_encode($actor), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     * TODO: swagger documentation
+     */
+    public function index()
+    {
+        $actors = $this->actorRepository->index();
+        return response(json_encode($actors), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
 }

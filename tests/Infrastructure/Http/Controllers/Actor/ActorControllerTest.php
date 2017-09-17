@@ -30,7 +30,13 @@ class ActorControllerTest extends LumenTest
         $this->json('GET', 'actor/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM), 'age' => 0, 'bio' => null, 'image' => null]);
+             ->seeJsonEquals([
+                 'name' => 'new actor',
+                 'birth' => (new DateTime('now'))->format(DateTime::ATOM),
+                 'age' => 0,
+                 'bio' => null,
+                 'image' => null,
+             ]);
     }
 
     public function testRemove()
@@ -72,12 +78,46 @@ class ActorControllerTest extends LumenTest
         $this->json('GET', 'actor/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson([
+             ->seeJsonEquals([
                  'name' => 'new actor',
                  'birth' => (new DateTime('last year'))->format(DateTime::ATOM),
                  'age' => 1,
                  'bio' => 'this is a bio',
                  'image' => 'im not really an image lol'
+             ]);
+    }
+
+    public function testIndex()
+    {
+        $token = $this->generateToken();
+
+        $command = ['api_token' => $token, 'name' => 'actor1', 'birth' => '2017-09-17T02:24:16+00:00'];
+        $this->json('POST', 'actor/create', $command)
+             ->seeStatusCode(Response::HTTP_OK);
+
+        $command = ['api_token' => $token, 'name' => 'actor2', 'birth' => '2017-09-17T02:23:16+00:00'];
+        $this->json('POST', 'actor/create', $command)
+             ->seeStatusCode(Response::HTTP_OK);
+
+        $query = ['api_token' => $token];
+        $this->json('GET', 'actor/index', $query)
+             ->seeStatusCode(Response::HTTP_OK)
+             ->seeHeader('Content-Type', 'application/json')
+             ->seeJsonEquals([
+                 [
+                     'name' => 'actor1',
+                     'birth' => '2017-09-17T02:24:16+00:00',
+                     'age' => 0,
+                     'bio' => null,
+                     'image' => null,
+                 ],
+                 [
+                     'name' => 'actor2',
+                     'birth' => '2017-09-17T02:23:16+00:00',
+                     'age' => 0,
+                     'bio' => null,
+                     'image' => null,
+                 ],
              ]);
     }
 

@@ -26,6 +26,7 @@ $router->post('actor/create', ['uses' => 'Actor\ActorController@create', 'middle
 $router->post('actor/remove', ['uses' => 'Actor\ActorController@remove', 'middleware' => ['auth']]);
 $router->post('actor/change', ['uses' => 'Actor\ActorController@change', 'middleware' => ['auth']]);
 $router->get('actor/show', ['uses' => 'Actor\ActorController@show', 'middleware' => ['auth']]);
+$router->get('actor/index', ['uses' => 'Actor\ActorController@index', 'middleware' => ['auth']]);
 
 // Genre
 $router->post('genre/create', ['uses' => 'Genre\GenreController@create', 'middleware' => ['auth']]);
