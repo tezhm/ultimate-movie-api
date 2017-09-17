@@ -12,7 +12,7 @@ use Uma\LumenTest;
  *
  * @package Uma\Infrastructure\Http\Controllers\Genre
  */
-class GenreTest extends LumenTest
+class GenreControllerTest extends LumenTest
 {
     const FIXTURE_DIR = __DIR__ . '/Fixtures/';
 
