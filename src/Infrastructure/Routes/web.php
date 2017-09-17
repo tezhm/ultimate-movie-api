@@ -45,3 +45,4 @@ $router->post('movie/change', ['uses' => 'Movie\MovieController@change', 'middle
 $router->post('movie/add/actor', ['uses' => 'Movie\MovieController@addActor', 'middleware' => ['auth']]);
 $router->post('movie/remove/actor', ['uses' => 'Movie\MovieController@removeActor', 'middleware' => ['auth']]);
 $router->get('movie/show', ['uses' => 'Movie\MovieController@show', 'middleware' => ['auth']]);
+$router->get('movie/index', ['uses' => 'Movie\MovieController@index', 'middleware' => ['auth']]);

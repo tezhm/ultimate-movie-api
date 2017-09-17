@@ -220,4 +220,13 @@ class MovieController extends Controller
 
         return response(json_encode($genre), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     * TODO: swagger documentation
+     */
+    public function index()
+    {
+        $movies = $this->movieRepository->index();
+        return response(json_encode($movies), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
 }
