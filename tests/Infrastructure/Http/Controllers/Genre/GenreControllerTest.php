@@ -30,7 +30,7 @@ class GenreControllerTest extends LumenTest
         $this->json('GET', 'genre/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new genre', 'movies' => [], 'actors' => []]);
+             ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
     }
 
     public function testRemove()
@@ -71,7 +71,7 @@ class GenreControllerTest extends LumenTest
         $this->json('GET', 'genre/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new genre', 'movies' => [], 'actors' => $actors]);
+             ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => $actors]);
     }
 
     public function testAddMovie()
@@ -95,7 +95,7 @@ class GenreControllerTest extends LumenTest
         $this->json('GET', 'genre/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new genre', 'movies' => $movies, 'actors' => []]);
+             ->seeJsonEquals(['name' => 'new genre', 'movies' => $movies, 'actors' => []]);
     }
 
     public function testRemoveActor()
@@ -119,7 +119,7 @@ class GenreControllerTest extends LumenTest
         $this->json('GET', 'genre/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new genre', 'movies' => [], 'actors' => []]);
+             ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
     }
 
     public function testRemoveMovie()
@@ -143,7 +143,29 @@ class GenreControllerTest extends LumenTest
         $this->json('GET', 'genre/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new genre', 'movies' => [], 'actors' => []]);
+             ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
+    }
+
+    public function testIndex()
+    {
+        $token = $this->generateToken();
+
+        $command = ['api_token' => $token, 'name' => 'genre1'];
+        $this->json('POST', 'genre/create', $command)
+             ->seeStatusCode(Response::HTTP_OK);
+
+        $command = ['api_token' => $token, 'name' => 'genre2'];
+        $this->json('POST', 'genre/create', $command)
+             ->seeStatusCode(Response::HTTP_OK);
+
+        $query = ['api_token' => $token, 'name' => 'new genre'];
+        $this->json('GET', 'genre/index', $query)
+             ->seeStatusCode(Response::HTTP_OK)
+             ->seeHeader('Content-Type', 'application/json')
+             ->seeJsonEquals([
+                 ['name' => 'genre1', 'movies' => [], 'actors' => []],
+                 ['name' => 'genre2', 'movies' => [], 'actors' => []],
+             ]);
     }
 
     private function seedActors()

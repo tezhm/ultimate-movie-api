@@ -36,6 +36,7 @@ $router->post('genre/add/movie', ['uses' => 'Genre\GenreController@addMovie', 'm
 $router->post('genre/remove/actor', ['uses' => 'Genre\GenreController@removeActor', 'middleware' => ['auth']]);
 $router->post('genre/remove/movie', ['uses' => 'Genre\GenreController@removeMovie', 'middleware' => ['auth']]);
 $router->get('genre/show', ['uses' => 'Genre\GenreController@show', 'middleware' => ['auth']]);
+$router->get('genre/index', ['uses' => 'Genre\GenreController@index', 'middleware' => ['auth']]);
 
 // Movie
 $router->post('movie/create', ['uses' => 'Movie\MovieController@create', 'middleware' => ['auth']]);

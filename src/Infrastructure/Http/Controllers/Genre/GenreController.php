@@ -219,4 +219,13 @@ class GenreController extends Controller
 
         return response(json_encode($genre), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
+
+    /**
+     * TODO: swagger documentation
+     */
+    public function index()
+    {
+        $genres = $this->genreRepository->index();
+        return response(json_encode($genres), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
 }
