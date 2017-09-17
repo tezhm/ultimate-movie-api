@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace Uma\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use JsonSerializable;
 use Uma\Domain\Exceptions\DomainException;
 
 /**
@@ -8,14 +11,14 @@ use Uma\Domain\Exceptions\DomainException;
  *
  * @package Uma\Domain\Model
  */
-class Movie extends PersistentId
+class Movie extends PersistentId implements JsonSerializable
 {
     /** @var string */
     private $name;
     /** @var Genre */
     private $genre;
-    /** @var Actor[] */
-    private $actors = [];
+    /** @var Collection(Actor[]) */
+    private $actors;
     /** @var string[] */
     private $characters = [];
     /** @var int[] */
@@ -33,6 +36,7 @@ class Movie extends PersistentId
     public function __construct(string $name)
     {
         $this->setName($name);
+        $this->actors = new ArrayCollection();
     }
 
     /**
@@ -227,16 +231,17 @@ class Movie extends PersistentId
     /**
      * Returns whether the given actor currently exists within this movie.
      *
-     * @param Actor $actor
+     * @param Actor   $actor
+     * @param Actor[] $haystack
      * @return array
      */
-    private function searchForActor(Actor $actor): array
+    private function searchForActor(Actor $actor, array $haystack): array
     {
         $predicate = function(Actor $current) use($actor)
         {
             return ($current->getName() === $actor->getName());
         };
-        return array_filter($this->actors, $predicate);
+        return array_filter($haystack, $predicate);
     }
 
     /**
@@ -247,7 +252,29 @@ class Movie extends PersistentId
      */
     private function searchForRoles(Actor $actor): array
     {
-        $positions = $this->searchForActor($actor);
+        $positions = $this->searchForActor($actor, $this->actors->toArray());
         return array_intersect_key($this->characters, $positions);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $actors = [];
+
+        foreach ($this->getActors() as $character => $actor)
+        {
+            $actors[$character] = $actor->getName();
+        }
+
+        return [
+            'name'        => $this->getName(),
+            'genre'       => ($this->genre === null) ? null : $this->genre->getName(),
+            'actors'      => $actors,
+            'rating'      => $this->getRating() ,
+            'description' => $this->getDescription(),
+            'image'       => $this->getImage(),
+        ];
     }
 }
