@@ -93,6 +93,18 @@ class ActorTest extends PHPUnit_Framework_TestCase
         $testClass->setBirth(new DateTime('tomorrow'));
     }
 
+    public function testGetAge()
+    {
+        /** @var Actor[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'ActorStub.yml');
+
+        $testClass = $fixtures['Actor'];
+        $birth = new DateTime('last year');
+        $testClass->setBirth($birth);
+
+        $this->assertEquals(1, $testClass->getAge());
+    }
+
     public function testSetBio()
     {
         /** @var Actor[] $fixtures */

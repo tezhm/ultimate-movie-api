@@ -55,6 +55,17 @@ class Actor extends PersistentId implements JsonSerializable
     }
 
     /**
+     * The current age of the actor.
+     *
+     * @return int
+     */
+    public function getAge(): int
+    {
+        $diff = $this->birth->diff(new DateTime());
+        return $diff->y;
+    }
+
+    /**
      * The biography of the actor.
      *
      * @return string|null
