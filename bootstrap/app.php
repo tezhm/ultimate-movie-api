@@ -74,6 +74,7 @@ $app->routeMiddleware([
 $app->register(GrahamCampbell\Throttle\ThrottleServiceProvider::class);
 $app->register(Illuminate\Cookie\CookieServiceProvider::class);
 $app->register(Illuminate\Session\SessionServiceProvider::class);
+$app->register(LaravelDoctrine\Migrations\MigrationsServiceProvider::class);
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 
 $app->register(Uma\Infrastructure\Providers\ActorProvider::class);
@@ -110,6 +111,7 @@ $app->router->group([
 $app->configure('auth');
 $app->configure('database');
 $app->configure('doctrine');
+$app->configure('migrations');
 $app->configure('session');
 $app->configure('throttle');
 
