@@ -16,6 +16,8 @@ use Uma\Domain\Exceptions\DomainException;
  */
 class UserTest extends PHPUnit_Framework_TestCase
 {
+    /** @var Loader */
+    private $alice;
     /** @var Container|MockInterface */
     private $mockContainer;
     /** @var Hasher|MockInterface */
@@ -24,6 +26,7 @@ class UserTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->alice = new Loader('en_US');
         $this->mockContainer = Mockery::mock(Container::class);
         $this->mockHasher = Mockery::mock(Hasher::class);
         DomainRegistry::setContainer($this->mockContainer);
@@ -103,6 +106,34 @@ class UserTest extends PHPUnit_Framework_TestCase
         $testClass->generateApiToken();
 
         $this->assertNotNull($testClass->getApiToken());
+    }
+
+    public function testAddFavourite()
+    {
+        /** @var Movie[] $fixtures */
+        $fixtures = $this->alice->load(__DIR__ . '/Fixtures/User/Movies.yml');
+        $this->expectsHash('password123', 'hashedpassword');
+
+        $testClass = new User("potatoooo", 'password123');
+        $testClass->addFavourite($fixtures['Movie1']);
+        $testClass->addFavourite($fixtures['Movie2']);
+
+        $expected = [$fixtures['Movie1'], $fixtures['Movie2']];
+        $this->assertEquals($expected, $testClass->getFavourites());
+    }
+
+    public function testAddFavouriteAlreadyExists()
+    {
+        /** @var Movie[] $fixtures */
+        $fixtures = $this->alice->load(__DIR__ . '/Fixtures/User/Movies.yml');
+        $this->expectsHash('password123', 'hashedpassword');
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Movie already favourited');
+
+        $testClass = new User("potatoooo", 'password123');
+        $testClass->addFavourite($fixtures['Movie1']);
+        $testClass->addFavourite($fixtures['Movie1']);
     }
 
     /**

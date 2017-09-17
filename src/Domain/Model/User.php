@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 namespace Uma\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Uma\Domain\Exceptions\DomainException;
 
@@ -17,6 +19,8 @@ class User extends PersistentId implements Authenticatable
     private $password;
     /** @var string */
     private $api_token;
+    /** @var Collection(Movie[]) */
+    private $movies;
 
     /**
      * User constructor.
@@ -29,6 +33,7 @@ class User extends PersistentId implements Authenticatable
         $this->setUsername($username);
         $this->setPassword($password);
         $this->api_token = null;
+        $this->movies = new ArrayCollection();
     }
 
     /**
@@ -48,6 +53,31 @@ class User extends PersistentId implements Authenticatable
     public function getApiToken(): ?string
     {
         return $this->api_token;
+    }
+
+    /**
+     * Returns the favourited movies of a user.
+     *
+     * @return Movie[]
+     */
+    public function getFavourites(): array
+    {
+        return $this->movies->toArray();
+    }
+
+    /**
+     * Adds a movie as a new favourite.
+     *
+     * @param Movie $movie
+     */
+    public function addFavourite(Movie $movie)
+    {
+        if (count($this->searchForMovie($movie, $this->getFavourites())) > 0)
+        {
+            throw new DomainException('Movie already favourited');
+        }
+
+        $this->movies[] = $movie;
     }
 
     /**
@@ -141,5 +171,21 @@ class User extends PersistentId implements Authenticatable
         }
 
         $this->password = DomainRegistry::hashService()->make($password);
+    }
+
+    /**
+     * Returns whether the given movie exists in the array.
+     *
+     * @param Movie   $movie
+     * @param Movie[] $haystack
+     * @return array
+     */
+    private function searchForMovie(Movie $movie, array $haystack): array
+    {
+        $predicate = function(Movie $current) use($movie)
+        {
+            return ($current->getName() === $movie->getName());
+        };
+        return array_filter($haystack, $predicate);
     }
 }
