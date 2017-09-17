@@ -5,7 +5,7 @@ import requests
 #print(r.text[:300] + '...')
 
 
-r = requests.post("http://localhost/login", data={'username': 'fred', 'password': 'password123'})
+r = requests.post("http://localhost/login", data={'username': 'apitest', 'password': 'password123'})
 print(r.status_code, r.reason)
 print(r.text[:300] + '...')
 
