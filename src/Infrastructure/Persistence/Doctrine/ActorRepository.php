@@ -41,6 +41,15 @@ class ActorRepository implements IActorRepository
     /**
      * {@inheritdoc}
      */
+    public function index(): array
+    {
+        $persister = $this->getEntityPersister();
+        return $persister->loadAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(Actor $actor)
     {
         $this->entityManager->persist($actor);

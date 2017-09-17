@@ -33,7 +33,23 @@ class ActorRepositoryTest extends LumenTest
 
         $result = $this->testClass->showByName($fixtures['Actor2']->getName());
 
-        $this->assertEquals($result, $fixtures['Actor2']);
+        $this->assertEquals($fixtures['Actor2'], $result);
+    }
+
+    public function testIndex()
+    {
+        /** @var Actor[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'Actors.yml');
+        $this->seedActors($fixtures);
+
+        $result = $this->testClass->index();
+
+        $expected = [
+            $fixtures['Actor1'],
+            $fixtures['Actor2'],
+            $fixtures['Actor3'],
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     public function testAdd()
@@ -46,7 +62,7 @@ class ActorRepositoryTest extends LumenTest
         $this->entityManager->clear();
 
         $result = $this->testClass->showByName($fixtures['Actor3']->getName());
-        $this->assertEquals($result, $fixtures['Actor3']);
+        $this->assertEquals($fixtures['Actor3'], $result);
     }
 
     private function seedActors(array $fixtures)

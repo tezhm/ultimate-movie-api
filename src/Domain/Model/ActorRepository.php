@@ -17,6 +17,13 @@ interface ActorRepository
     public function showByName(string $name): ?Actor;
 
     /**
+     * Retrieves all actors.
+     *
+     * @return Actor[]
+     */
+    public function index(): array;
+
+    /**
      * Persist an actor.
      *
      * @param Actor $actor
