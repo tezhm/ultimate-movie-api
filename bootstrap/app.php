@@ -78,6 +78,7 @@ $app->register(LaravelDoctrine\Migrations\MigrationsServiceProvider::class);
 $app->register(LaravelDoctrine\ORM\DoctrineServiceProvider::class);
 
 $app->register(Uma\Infrastructure\Providers\ActorProvider::class);
+$app->register(Uma\Infrastructure\Providers\ConsoleProvider::class);
 $app->register(Uma\Infrastructure\Providers\DomainProvider::class);
 $app->register(Uma\Infrastructure\Providers\GenreProvider::class);
 $app->register(Uma\Infrastructure\Providers\MovieProvider::class);
