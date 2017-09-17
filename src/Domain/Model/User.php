@@ -4,6 +4,7 @@ namespace Uma\Domain\Model;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Illuminate\Contracts\Auth\Authenticatable;
+use JsonSerializable;
 use Uma\Domain\Exceptions\DomainException;
 
 /**
@@ -11,7 +12,7 @@ use Uma\Domain\Exceptions\DomainException;
  *
  * @package Uma\Domain\Model
  */
-class User extends PersistentId implements Authenticatable
+class User extends PersistentId implements Authenticatable, JsonSerializable
 {
     /** @var string */
     private $username;
@@ -205,5 +206,23 @@ class User extends PersistentId implements Authenticatable
             return ($current->getName() === $movie->getName());
         };
         return array_filter($haystack, $predicate);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $favourites = [];
+
+        foreach ($this->getFavourites() as $favourite)
+        {
+            $favourites[] = $favourite->getName();
+        }
+
+        return [
+            'username'   => $this->getAuthIdentifier(),
+            'favourites' => $favourites,
+        ];
     }
 }
