@@ -41,6 +41,15 @@ class GenreRepository implements IGenreRepository
     /**
      * {@inheritdoc}
      */
+    public function index(): array
+    {
+        $persister = $this->getEntityPersister();
+        return $persister->loadAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function add(Genre $Genre)
     {
         $this->entityManager->persist($Genre);

@@ -33,7 +33,23 @@ class GenreRepositoryTest extends LumenTest
 
         $result = $this->testClass->showByName($fixtures['Genre2']->getName());
 
-        $this->assertEquals($result, $fixtures['Genre2']);
+        $this->assertEquals($fixtures['Genre2'], $result);
+    }
+
+    public function testIndex()
+    {
+        /** @var Genre[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'Genres.yml');
+        $this->seedGenres($fixtures);
+
+        $result = $this->testClass->index();
+
+        $expected = [
+            $fixtures['Genre3'],
+            $fixtures['Genre1'],
+            $fixtures['Genre2'],
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     public function testAdd()
@@ -46,7 +62,7 @@ class GenreRepositoryTest extends LumenTest
         $this->entityManager->clear();
 
         $result = $this->testClass->showByName($fixtures['Genre3']->getName());
-        $this->assertEquals($result, $fixtures['Genre3']);
+        $this->assertEquals($fixtures['Genre3'], $result);
     }
 
     private function seedGenres(array $fixtures)

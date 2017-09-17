@@ -17,6 +17,13 @@ interface GenreRepository
     public function showByName(string $name): ?Genre;
 
     /**
+     * Retrieves all genres.
+     *
+     * @return Genre[]
+     */
+    public function index(): array;
+
+    /**
      * Persist an Genre.
      *
      * @param Genre $Genre
