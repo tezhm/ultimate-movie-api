@@ -3,6 +3,7 @@ namespace Uma\Infrastructure\Mappings\Doctrine;
 
 use LaravelDoctrine\Fluent\EntityMapping;
 use LaravelDoctrine\Fluent\Fluent;
+use Uma\Domain\Model\Movie as MovieEntity;
 use Uma\Domain\Model\User as UserEntity;
 
 /**
@@ -32,6 +33,14 @@ class User extends EntityMapping
                 ->length(255);
         $builder->string('api_token')
                 ->nullable(true);
+
+        // Relations
+        $builder->manyToMany(MovieEntity::class, 'movies')
+                ->joinTable('user_movies')
+                ->joinColumn('user_id', 'id')
+                ->inverseKey('movie_id', 'id')
+                ->fetchEager()
+                ->cascadePersist();
 
         // Indexes
         $builder->unique('username');
