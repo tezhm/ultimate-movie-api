@@ -159,6 +159,7 @@ class Actor extends PersistentId implements JsonSerializable
         return [
             'name'  => $this->name,
             'birth' => $this->birth->format(DateTime::ATOM),
+            'age'   => $this->getAge(),
             'bio'   => $this->bio,
             'image' => $this->image,
         ];

@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Uma\Infrastructure\Http\Controllers\Actor;
 
+use DateTime;
 use Illuminate\Http\Response;
 use Uma\DatabaseTransactions;
 use Uma\Domain\Model\User;
@@ -21,7 +22,7 @@ class ActorControllerTest extends LumenTest
     {
         $token = $this->generateToken();
 
-        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => '2000-09-10T00:00:00+00:00'];
+        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
         $this->json('POST', 'actor/create', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
@@ -29,14 +30,14 @@ class ActorControllerTest extends LumenTest
         $this->json('POST', 'actor/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
-             ->seeJson(['name' => 'new actor', 'birth' => '2000-09-10T00:00:00+00:00', 'bio' => null, 'image' => null]);
+             ->seeJson(['name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM), 'age' => 0, 'bio' => null, 'image' => null]);
     }
 
     public function testRemove()
     {
         $token = $this->generateToken();
 
-        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => '2000-09-10T00:00:00+00:00'];
+        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
         $this->json('POST', 'actor/create', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
@@ -53,14 +54,14 @@ class ActorControllerTest extends LumenTest
     {
         $token = $this->generateToken();
 
-        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => '2000-09-10T00:00:00+00:00'];
+        $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
         $this->json('POST', 'actor/create', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = [
             'api_token' => $token,
             'name' => 'new actor',
-            'birth' => '2000-08-10T00:00:00+00:00',
+            'birth' => (new DateTime('last year'))->format(DateTime::ATOM),
             'bio' => 'this is a bio',
             'image' => 'im not really an image lol'
         ];
@@ -73,7 +74,8 @@ class ActorControllerTest extends LumenTest
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson([
                  'name' => 'new actor',
-                 'birth' => '2000-08-10T00:00:00+00:00',
+                 'birth' => (new DateTime('last year'))->format(DateTime::ATOM),
+                 'age' => 1,
                  'bio' => 'this is a bio',
                  'image' => 'im not really an image lol'
              ]);
