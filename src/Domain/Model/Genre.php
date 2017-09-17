@@ -1,6 +1,9 @@
 <?php declare(strict_types=1);
 namespace Uma\Domain\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use JsonSerializable;
 use Uma\Domain\Exceptions\DomainException;
 
 /**
@@ -8,14 +11,14 @@ use Uma\Domain\Exceptions\DomainException;
  *
  * @package Uma\Domain\Model
  */
-class Genre extends PersistentId
+class Genre extends PersistentId implements JsonSerializable
 {
     /** @var string */
     private $name;
-    /** @var Movie[] */
-    private $movies = [];
-    /** @var Actor[] */
-    private $actors = [];
+    /** @var Collection(Movie[]) */
+    private $movies;
+    /** @var Collection(Actor[]) */
+    private $actors;
 
     /**
      * Genre constructor.
@@ -25,6 +28,8 @@ class Genre extends PersistentId
     public function __construct(string $name)
     {
         $this->setName($name);
+        $this->movies = new ArrayCollection();
+        $this->actors = new ArrayCollection();
     }
 
     /**
@@ -40,28 +45,28 @@ class Genre extends PersistentId
     /**
      * Movies within this genre.
      *
-     * @return array
+     * @return Movie[]
      */
     public function getMovies(): array
     {
-        return $this->movies;
+        return $this->movies->toArray();
     }
 
     /**
      * Actors within this genre.
      *
-     * @return array
+     * @return Actor[]
      */
     public function getActors(): array
     {
         $movieActors = [];
 
-        foreach ($this->movies as $movie)
+        foreach ($this->getMovies() as $movie)
         {
             $movieActors = array_merge($movieActors, array_values($movie->getActors()));
         }
 
-        $allActors = array_merge($movieActors, $this->actors);
+        $allActors = array_merge($movieActors, $this->actors->toArray());
         return $this->getUniqueActors($allActors);
     }
 
@@ -89,7 +94,7 @@ class Genre extends PersistentId
      */
     public function addMovie(Movie $movie)
     {
-        if (count($this->searchForMovie($movie, $this->movies)) > 0)
+        if (count($this->searchForMovie($movie, $this->getMovies())) > 0)
         {
             throw new DomainException('Movie already within genre');
         }
@@ -104,7 +109,7 @@ class Genre extends PersistentId
      */
     public function addActor(Actor $actor)
     {
-        if (count($this->searchForActor($actor, $this->actors)) > 0)
+        if (count($this->searchForActor($actor, $this->actors->toArray())) > 0)
         {
             throw new DomainException('Actor already within genre');
         }
@@ -119,7 +124,7 @@ class Genre extends PersistentId
      */
     public function removeMovie(Movie $movie)
     {
-        $search = $this->searchForMovie($movie, $this->movies);
+        $search = $this->searchForMovie($movie, $this->getMovies());
 
         if (count($search) === 0)
         {
@@ -137,7 +142,7 @@ class Genre extends PersistentId
      */
     public function removeActor(Actor $actor)
     {
-        $search = $this->searchForActor($actor, $this->actors);
+        $search = $this->searchForActor($actor, $this->actors->toArray());
 
         if (count($search) === 0)
         {
@@ -201,5 +206,30 @@ class Genre extends PersistentId
         }
 
         return array_values($result);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        $movies = [];
+        $actors = [];
+
+        foreach ($this->getMovies() as $movie)
+        {
+            $movies[] = $movie->getName();
+        }
+
+        foreach ($this->getActors() as $actor)
+        {
+            $actors[] = $actor->getName();
+        }
+
+        return [
+            'name'   => $this->name,
+            'movies' => $movies,
+            'actors' => $actors,
+        ];
     }
 }
