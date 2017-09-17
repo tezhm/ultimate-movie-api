@@ -27,7 +27,7 @@ class MovieControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/show', $query)
+        $this->json('GET', 'movie/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson([
@@ -53,7 +53,7 @@ class MovieControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/show', $query)
+        $this->json('GET', 'movie/show', $query)
              ->seeStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
@@ -78,7 +78,7 @@ class MovieControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/show', $query)
+        $this->json('GET', 'movie/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson([
@@ -109,7 +109,7 @@ class MovieControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/show', $query)
+        $this->json('GET', 'movie/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson([
@@ -140,7 +140,7 @@ class MovieControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/show', $query)
+        $this->json('GET', 'movie/show', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson([

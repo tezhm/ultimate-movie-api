@@ -17,13 +17,15 @@ $router->post('logout', ['uses' => 'Auth\LoginController@logout']);
 
 // User
 $router->post('user/create', ['uses' => 'User\UserController@create']);
-$router->post('user/favourite', ['uses' => 'User\UserController@favourite', 'middleware' => ['auth']]);
+$router->post('user/add/favourite', ['uses' => 'User\UserController@addFavourite', 'middleware' => ['auth']]);
+$router->post('user/remove/favourite', ['uses' => 'User\UserController@removeFavourite', 'middleware' => ['auth']]);
+$router->get('user/show', ['uses' => 'User\UserController@show', 'middleware' => ['auth']]);
 
 // Actor
 $router->post('actor/create', ['uses' => 'Actor\ActorController@create', 'middleware' => ['auth']]);
 $router->post('actor/remove', ['uses' => 'Actor\ActorController@remove', 'middleware' => ['auth']]);
 $router->post('actor/change', ['uses' => 'Actor\ActorController@change', 'middleware' => ['auth']]);
-$router->post('actor/show', ['uses' => 'Actor\ActorController@show', 'middleware' => ['auth']]);
+$router->get('actor/show', ['uses' => 'Actor\ActorController@show', 'middleware' => ['auth']]);
 
 // Genre
 $router->post('genre/create', ['uses' => 'Genre\GenreController@create', 'middleware' => ['auth']]);
@@ -32,7 +34,7 @@ $router->post('genre/add/actor', ['uses' => 'Genre\GenreController@addActor', 'm
 $router->post('genre/add/movie', ['uses' => 'Genre\GenreController@addMovie', 'middleware' => ['auth']]);
 $router->post('genre/remove/actor', ['uses' => 'Genre\GenreController@removeActor', 'middleware' => ['auth']]);
 $router->post('genre/remove/movie', ['uses' => 'Genre\GenreController@removeMovie', 'middleware' => ['auth']]);
-$router->post('genre/show', ['uses' => 'Genre\GenreController@show', 'middleware' => ['auth']]);
+$router->get('genre/show', ['uses' => 'Genre\GenreController@show', 'middleware' => ['auth']]);
 
 // Movie
 $router->post('movie/create', ['uses' => 'Movie\MovieController@create', 'middleware' => ['auth']]);
@@ -40,4 +42,4 @@ $router->post('movie/remove', ['uses' => 'Movie\MovieController@remove', 'middle
 $router->post('movie/change', ['uses' => 'Movie\MovieController@change', 'middleware' => ['auth']]);
 $router->post('movie/add/actor', ['uses' => 'Movie\MovieController@addActor', 'middleware' => ['auth']]);
 $router->post('movie/remove/actor', ['uses' => 'Movie\MovieController@removeActor', 'middleware' => ['auth']]);
-$router->post('movie/show', ['uses' => 'Movie\MovieController@show', 'middleware' => ['auth']]);
+$router->get('movie/show', ['uses' => 'Movie\MovieController@show', 'middleware' => ['auth']]);
