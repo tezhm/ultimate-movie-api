@@ -136,6 +136,33 @@ class UserTest extends PHPUnit_Framework_TestCase
         $testClass->addFavourite($fixtures['Movie1']);
     }
 
+    public function testRemoveFavourite()
+    {
+        /** @var Genre[]|Movie[] $fixtures */
+        $fixtures = $this->alice->load(__DIR__ . '/Fixtures/User/Movies.yml');
+        $this->expectsHash('password123', 'hashedpassword');
+
+        $testClass = new User("potatoooo", 'password123');
+        $testClass->addFavourite($fixtures['Movie1']);
+        $testClass->removeFavourite($fixtures['Movie1']);
+
+        $this->assertEquals([], $testClass->getFavourites());
+    }
+
+    public function testRemoveFavouriteDoesNotExist()
+    {
+        /** @var Genre[]|Movie[] $fixtures */
+        $fixtures = $this->alice->load(__DIR__ . '/Fixtures/User/Movies.yml');
+        $this->expectsHash('password123', 'hashedpassword');
+
+        $this->expectException(DomainException::class);
+        $this->expectExceptionMessage('Movie not favourited');
+
+        $testClass = new User("potatoooo", 'password123');
+        $testClass->addFavourite($fixtures['Movie1']);
+        $testClass->removeFavourite($fixtures['Movie2']);
+    }
+
     /**
      * Provides the make() method of Hasher.
      *

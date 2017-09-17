@@ -81,6 +81,24 @@ class User extends PersistentId implements Authenticatable
     }
 
     /**
+     * Removes a movie from favourites.
+     *
+     * @param Movie $movie
+     */
+    public function removeFavourite(Movie $movie)
+    {
+        $search = $this->searchForMovie($movie, $this->getFavourites());
+
+        if (count($search) === 0)
+        {
+            throw new DomainException('Movie not favourited');
+        }
+
+        reset($search);
+        unset($this->movies[key($search)]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAuthIdentifierName()
