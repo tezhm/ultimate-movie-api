@@ -33,7 +33,23 @@ class MovieRepositoryTest extends LumenTest
 
         $result = $this->testClass->showByName($fixtures['Movie2']->getName());
 
-        $this->assertEquals($result, $fixtures['Movie2']);
+        $this->assertEquals($fixtures['Movie2'], $result);
+    }
+
+    public function testIndex()
+    {
+        /** @var Movie[] $fixtures */
+        $fixtures = $this->alice->load(self::FIXTURE_DIR . 'Movies.yml');
+        $this->seedMovies($fixtures);
+
+        $result = $this->testClass->index();
+
+        $expected = [
+            $fixtures['Movie1'],
+            $fixtures['Movie2'],
+            $fixtures['Movie3'],
+        ];
+        $this->assertEquals($expected, $result);
     }
 
     public function testAdd()
@@ -46,7 +62,7 @@ class MovieRepositoryTest extends LumenTest
         $this->entityManager->clear();
 
         $result = $this->testClass->showByName($fixtures['Movie3']->getName());
-        $this->assertEquals($result, $fixtures['Movie3']);
+        $this->assertEquals($fixtures['Movie3'], $result);
     }
 
     private function seedMovies(array $fixtures)

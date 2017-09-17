@@ -17,6 +17,13 @@ interface MovieRepository
     public function showByName(string $name): ?Movie;
 
     /**
+     * Retrieves all movies.
+     *
+     * @return Movie[]
+     */
+    public function index(): array;
+
+    /**
      * Persist an Movie.
      *
      * @param Movie $movie
