@@ -158,7 +158,7 @@ class GenreControllerTest extends LumenTest
         $this->json('POST', 'genre/create', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
-        $query = ['api_token' => $token, 'name' => 'new genre'];
+        $query = ['api_token' => $token];
         $this->json('GET', 'genre/index', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
