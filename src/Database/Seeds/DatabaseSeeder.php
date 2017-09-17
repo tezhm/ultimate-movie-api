@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $genres = $loader->load(__DIR__ . '/Fixtures/Genres.yml');
         $users = $loader->load(__DIR__ . '/Fixtures/User.yml');
 
+        $this->updateActors($actors);
         $this->updateGenres($genres, $movies, $actors);
         $this->updateMovies($movies, $actors, $genres);
 
@@ -44,6 +45,29 @@ class DatabaseSeeder extends Seeder
                 $entityManager->persist($entity);
             }
         });
+    }
+
+    /**
+     * Updates the images of the actors.
+     *
+     * @param Actor[] $actors
+     */
+    private function updateActors(array $actors)
+    {
+        $mike = file_get_contents(__DIR__ . '/Fixtures/mike_myers.jpg');
+        $actors['Actor1']->setImage(base64_encode($mike));
+
+        $heather = file_get_contents(__DIR__ . '/Fixtures/heather_graham.jpg');
+        $actors['Actor2']->setImage(base64_encode($heather));
+
+        $shia = file_get_contents(__DIR__ . '/Fixtures/shia_labeouf.jpg');
+        $actors['Actor3']->setImage(base64_encode($shia));
+
+        $megan = file_get_contents(__DIR__ . '/Fixtures/megan_fox.jpg');
+        $actors['Actor4']->setImage(base64_encode($megan));
+
+        $mark = file_get_contents(__DIR__ . '/Fixtures/mark_ryan.jpg');
+        $actors['Actor5']->setImage(base64_encode($mark));
     }
 
     /**
@@ -71,11 +95,15 @@ class DatabaseSeeder extends Seeder
      */
     private function updateMovies(array $movies, array $actors, array $genres)
     {
+        $transformers = file_get_contents(__DIR__ . '/Fixtures/transformers.jpg');
+        $movies['Movie1']->setImage(base64_encode($transformers));
         $movies['Movie1']->addActor('Sam Witwicky', $actors['Actor3']);
         $movies['Movie1']->addActor('Mikaela Banes', $actors['Actor4']);
         $movies['Movie1']->addActor('Bumblebee', $actors['Actor5']);
         $movies['Movie1']->setGenre($genres['Genre1']);
 
+        $austinPowers = file_get_contents(__DIR__ . '/Fixtures/austin_powers.jpg');
+        $movies['Movie2']->setImage(base64_encode($austinPowers));
         $movies['Movie2']->addActor('Austin Powers', $actors['Actor1']);
         $movies['Movie2']->addActor('Felicity Shagwell', $actors['Actor2']);
         $movies['Movie2']->setGenre($genres['Genre2']);
