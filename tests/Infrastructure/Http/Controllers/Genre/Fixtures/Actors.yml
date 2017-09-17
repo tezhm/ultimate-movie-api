@@ -1,0 +1,5 @@
+include:
+  - ../../../../../../src/Infrastructure/Fixtures/Actor.yml
+
+Uma\Domain\Model\Actor:
+  Actor{1..2} (extends Actor):

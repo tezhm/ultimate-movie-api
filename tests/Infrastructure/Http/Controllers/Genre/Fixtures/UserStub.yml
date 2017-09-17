@@ -1,0 +1,5 @@
+include:
+  - ../../../../../../src/Infrastructure/Fixtures/User.yml
+
+Uma\Domain\Model\User:
+  User (extends User):
