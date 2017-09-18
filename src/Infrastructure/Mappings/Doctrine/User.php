@@ -35,8 +35,8 @@ class User extends EntityMapping
                 ->nullable(true);
 
         // Relations
-        $builder->manyToMany(MovieEntity::class, 'movies')
-                ->joinTable('user_movies')
+        $builder->manyToMany(MovieEntity::class, 'favourites')
+                ->joinTable('user_favourites')
                 ->joinColumn('user_id', 'id')
                 ->inverseKey('movie_id', 'id')
                 ->fetchEager()

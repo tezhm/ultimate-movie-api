@@ -11,17 +11,24 @@ use Uma\Domain\Exceptions\DomainException;
  * Contains user information.
  *
  * @package Uma\Domain\Model
+ * @SWG\Definition(type="object", @SWG\Xml(name="User"))
  */
 class User extends PersistentId implements Authenticatable, JsonSerializable
 {
-    /** @var string */
+    /**
+     * @SWG\Property()
+     * @var string
+     */
     private $username;
     /** @var string */
     private $password;
     /** @var string */
     private $api_token;
-    /** @var Collection(Movie[]) */
-    private $movies;
+    /**
+     * @SWG\Property(type="array", @SWG\Items(type="string"))
+     * @var Collection(Movie[])
+     */
+    private $favourites;
 
     /**
      * User constructor.
@@ -34,7 +41,7 @@ class User extends PersistentId implements Authenticatable, JsonSerializable
         $this->setUsername($username);
         $this->setPassword($password);
         $this->api_token = null;
-        $this->movies = new ArrayCollection();
+        $this->favourites = new ArrayCollection();
     }
 
     /**
@@ -63,7 +70,7 @@ class User extends PersistentId implements Authenticatable, JsonSerializable
      */
     public function getFavourites(): array
     {
-        return $this->movies->toArray();
+        return $this->favourites->toArray();
     }
 
     /**
@@ -78,7 +85,7 @@ class User extends PersistentId implements Authenticatable, JsonSerializable
             throw new DomainException('Movie already favourited');
         }
 
-        $this->movies[] = $movie;
+        $this->favourites[] = $movie;
     }
 
     /**
@@ -96,7 +103,7 @@ class User extends PersistentId implements Authenticatable, JsonSerializable
         }
 
         reset($search);
-        unset($this->movies[key($search)]);
+        unset($this->favourites[key($search)]);
     }
 
     /**

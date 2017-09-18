@@ -10,16 +10,29 @@ use Uma\Domain\Exceptions\DomainException;
  * Details of an actor.
  *
  * @package Uma\Domain\Model
+ * @SWG\Definition(type="object", @SWG\Xml(name="Actor"))
  */
 class Actor extends PersistentId implements JsonSerializable
 {
-    /** @var string */
+    /**
+     * @SWG\Property()
+     * @var string
+     */
     private $name;
-    /** @var DateTime */
+    /**
+     * @SWG\Property(format="date")
+     * @var DateTime
+     */
     private $birth;
-    /** @var string|null */
+    /**
+     * @SWG\Property()
+     * @var string|null
+     */
     private $bio;
-    /** @var string|null */
+    /**
+     * @SWG\Property(format="byte")
+     * @var string|null
+     */
     private $image;
 
     /**

@@ -10,22 +10,41 @@ use Uma\Domain\Exceptions\DomainException;
  * Details of a movie.
  *
  * @package Uma\Domain\Model
+ * @SWG\Definition(type="object", @SWG\Xml(name="Movie"))
  */
 class Movie extends PersistentId implements JsonSerializable
 {
-    /** @var string */
+    /**
+     * @SWG\Property()
+     * @var string
+     */
     private $name;
-    /** @var Genre */
+    /**
+     * @SWG\Property(type="string")
+     * @var Genre
+     */
     private $genre;
-    /** @var Collection(Actor[]) */
+    /**
+     * @SWG\Property(type="object", @SWG\Items(type="string"))
+     * @var Collection(Actor[])
+     */
     private $actors;
     /** @var string[] */
     private $characters = [];
-    /** @var int[] */
+    /**
+     * @SWG\Property(type="float")
+     * @var int[]
+     */
     private $rating = [];
-    /** @var string|null */
+    /**
+     * @SWG\Property()
+     * @var string|null
+     */
     private $description;
-    /** @var string|null */
+    /**
+     * @SWG\Property(format="byte")
+     * @var string|null
+     */
     private $image;
 
     /**

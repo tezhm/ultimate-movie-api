@@ -16,7 +16,8 @@
         "illuminate/session": "^5.5",
         "illuminate/cookie": "^5.5",
         "illuminate/auth": "^5.5",
-        "graham-campbell/throttle": "^6.0"
+        "graham-campbell/throttle": "^6.0",
+        "zircote/swagger-php": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

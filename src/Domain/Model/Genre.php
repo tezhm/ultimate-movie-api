@@ -10,14 +10,24 @@ use Uma\Domain\Exceptions\DomainException;
  * A style/category of movies.
  *
  * @package Uma\Domain\Model
+ * @SWG\Definition(type="object", @SWG\Xml(name="Genre"))
  */
 class Genre extends PersistentId implements JsonSerializable
 {
-    /** @var string */
+    /**
+     * @SWG\Property()
+     * @var string
+     */
     private $name;
-    /** @var Collection(Movie[]) */
+    /**
+     * @SWG\Property(type="array", @SWG\Items(type="string"))
+     * @var Collection(Movie[])
+     */
     private $movies;
-    /** @var Collection(Actor[]) */
+    /**
+     * @SWG\Property(type="array", @SWG\Items(type="string"))
+     * @var Collection(Actor[])
+     */
     private $actors;
 
     /**
