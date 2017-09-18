@@ -35,7 +35,35 @@ class ActorController extends Controller
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Post(
+     *     path="/actor",
+     *     tags={"actor"},
+     *     operationId="createActor",
+     *     summary="Creates a new actor",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Birth date of the actor",
+     *         in="formData",
+     *         name="birth",
+     *         required=true,
+     *         type="string",
+     *         format="date",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:actors", "read:actors"}}}
+     * )
      *
      * @param Request $request
      */
@@ -54,7 +82,27 @@ class ActorController extends Controller
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Delete(
+     *     path="/actor",
+     *     tags={"actor"},
+     *     operationId="removeActor",
+     *     summary="Removes an existing actor",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:actors", "read:actors"}}}
+     * )
      *
      * @param Request $request
      */
@@ -76,7 +124,50 @@ class ActorController extends Controller
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Put(
+     *     path="/actor",
+     *     tags={"actor"},
+     *     operationId="changeActor",
+     *     summary="Updates an existing actor",
+     *     description="Provides functionality for update birth, bio, and image.",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="birth",
+     *         required=false,
+     *         type="string",
+     *         format="date",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="bio",
+     *         required=false,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="image",
+     *         required=false,
+     *         type="string",
+     *         format="byte",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:actors", "read:actors"}}}
+     * )
      *
      * @param Request $request
      */
@@ -111,7 +202,27 @@ class ActorController extends Controller
     }
 
     /**
-     * Queries an Actor by name.
+     * @SWG\Get(
+     *     path="/actor/showByName",
+     *     tags={"actor"},
+     *     operationId="changeActor",
+     *     summary="Removes an existing actor",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:actors", "read:actors"}}}
+     * )
      *
      * @param Request $request
      * @return Response
@@ -130,7 +241,27 @@ class ActorController extends Controller
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Put(
+     *     path="/actor/index",
+     *     tags={"actor"},
+     *     operationId="changeActor",
+     *     summary="Removes an existing actor",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Full name of the actor",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:actors", "read:actors"}}}
+     * )
      */
     public function index()
     {

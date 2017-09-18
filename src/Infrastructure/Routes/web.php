@@ -22,10 +22,10 @@ $router->post('user/remove/favourite', ['uses' => 'User\UserController@removeFav
 $router->get('user/show', ['uses' => 'User\UserController@show', 'middleware' => ['auth', 'throttle:60']]);
 
 // Actor
-$router->post('actor/create', ['uses' => 'Actor\ActorController@create', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('actor/remove', ['uses' => 'Actor\ActorController@remove', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('actor/change', ['uses' => 'Actor\ActorController@change', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('actor/show', ['uses' => 'Actor\ActorController@show', 'middleware' => ['auth', 'throttle:60']]);
+$router->post('actor', ['uses' => 'Actor\ActorController@create', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('actor', ['uses' => 'Actor\ActorController@remove', 'middleware' => ['auth', 'throttle:60']]);
+$router->put('actor', ['uses' => 'Actor\ActorController@change', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('actor/showByName', ['uses' => 'Actor\ActorController@show', 'middleware' => ['auth', 'throttle:60']]);
 $router->get('actor/index', ['uses' => 'Actor\ActorController@index', 'middleware' => ['auth', 'throttle:60']]);
 
 // Genre
