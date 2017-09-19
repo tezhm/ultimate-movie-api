@@ -63,9 +63,15 @@ password: password123
 
 ### Generating documentation
 
-TODO:
+Documentation can be generated using the swagger-php plugin:
 
-## Running tests
+```
+./vendor/bin/swagger -o docs/ src/
+```
+
+The output `swagger.json` file can be found in `docs/`.
+
+### Running tests
 
 Running unit + component + integration tests can be done from project root with:
 

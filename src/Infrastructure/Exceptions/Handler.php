@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace Uma\Infrastructure\Exceptions;
 
+use Doctrine\DBAL\DBALException;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
@@ -49,6 +50,7 @@ class Handler extends ExceptionHandler
     {
         switch (get_class($e))
         {
+            case DBALException::class:
             case DomainException::class:
                 return response($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
             case NoResourceException::class:
