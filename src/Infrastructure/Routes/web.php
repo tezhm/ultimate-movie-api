@@ -29,14 +29,14 @@ $router->get('actor/showByName', ['uses' => 'Actor\ActorController@show', 'middl
 $router->get('actor/index', ['uses' => 'Actor\ActorController@index', 'middleware' => ['auth', 'throttle:60']]);
 
 // Genre
-$router->post('genre/create', ['uses' => 'Genre\GenreController@create', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('genre/remove', ['uses' => 'Genre\GenreController@remove', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('genre/add/actor', ['uses' => 'Genre\GenreController@addActor', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('genre/add/movie', ['uses' => 'Genre\GenreController@addMovie', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('genre/remove/actor', ['uses' => 'Genre\GenreController@removeActor', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('genre/remove/movie', ['uses' => 'Genre\GenreController@removeMovie', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('genre/show', ['uses' => 'Genre\GenreController@show', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('genre/index', ['uses' => 'Genre\GenreController@index', 'middleware' => ['auth', 'throttle:60']]);
+$router->post('genre', ['uses' => 'Genre\GenreController@create', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('genre', ['uses' => 'Genre\GenreController@remove', 'middleware' => ['auth', 'throttle:60']]);
+$router->put('genre/actor', ['uses' => 'Genre\GenreController@addActor', 'middleware' => ['auth', 'throttle:60']]);
+$router->put('genre/movie', ['uses' => 'Genre\GenreController@addMovie', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('genre/actor', ['uses' => 'Genre\GenreController@removeActor', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('genre/movie', ['uses' => 'Genre\GenreController@removeMovie', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('genre', ['uses' => 'Genre\GenreController@show', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('genres', ['uses' => 'Genre\GenreController@index', 'middleware' => ['auth', 'throttle:60']]);
 
 // Movie
 $router->post('movie/create', ['uses' => 'Movie\MovieController@create', 'middleware' => ['auth', 'throttle:60']]);

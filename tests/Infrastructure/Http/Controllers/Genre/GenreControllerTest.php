@@ -23,11 +23,11 @@ class GenreControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('GET', 'genre/show', $query)
+        $this->json('GET', 'genre', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
@@ -38,16 +38,16 @@ class GenreControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/remove', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('DELETE', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_NO_CONTENT);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
         $this->json('GET', 'genre/show', $query)
-             ->seeStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+             ->seeStatusCode(Response::HTTP_NOT_FOUND);
     }
 
     public function testAddActor()
@@ -56,19 +56,19 @@ class GenreControllerTest extends LumenTest
         $actors = $this->seedActors();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'actor' => $actors[0]];
-        $this->json('POST', 'genre/add/actor', $command)
+        $this->json('PUT', 'genre/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'actor' => $actors[1]];
-        $this->json('POST', 'genre/add/actor', $command)
+        $this->json('PUT', 'genre/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('GET', 'genre/show', $query)
+        $this->json('GET', 'genre', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => $actors]);
@@ -80,19 +80,19 @@ class GenreControllerTest extends LumenTest
         $movies = $this->seedMovies();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'movie' => $movies[0]];
-        $this->json('POST', 'genre/add/movie', $command)
+        $this->json('PUT', 'genre/movie', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'movie' => $movies[1]];
-        $this->json('POST', 'genre/add/movie', $command)
+        $this->json('PUT', 'genre/movie', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('GET', 'genre/show', $query)
+        $this->json('GET', 'genre', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals(['name' => 'new genre', 'movies' => $movies, 'actors' => []]);
@@ -104,19 +104,19 @@ class GenreControllerTest extends LumenTest
         $actors = $this->seedActors();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
+
+        $command = ['api_token' => $token, 'name' => 'new genre', 'actor' => $actors[0]];
+        $this->json('PUT', 'genre/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'actor' => $actors[0]];
-        $this->json('POST', 'genre/add/actor', $command)
-             ->seeStatusCode(Response::HTTP_OK);
-
-        $command = ['api_token' => $token, 'name' => 'new genre', 'actor' => $actors[0]];
-        $this->json('POST', 'genre/remove/actor', $command)
+        $this->json('DELETE', 'genre/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('GET', 'genre/show', $query)
+        $this->json('GET', 'genre', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
@@ -128,19 +128,19 @@ class GenreControllerTest extends LumenTest
         $movies = $this->seedMovies();
 
         $command = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('POST', 'genre/create', $command)
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
+
+        $command = ['api_token' => $token, 'name' => 'new genre', 'movie' => $movies[0]];
+        $this->json('PUT', 'genre/movie', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new genre', 'movie' => $movies[0]];
-        $this->json('POST', 'genre/add/movie', $command)
-             ->seeStatusCode(Response::HTTP_OK);
-
-        $command = ['api_token' => $token, 'name' => 'new genre', 'movie' => $movies[0]];
-        $this->json('POST', 'genre/remove/movie', $command)
+        $this->json('DELETE', 'genre/movie', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new genre'];
-        $this->json('GET', 'genre/show', $query)
+        $this->json('GET', 'genre', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals(['name' => 'new genre', 'movies' => [], 'actors' => []]);
@@ -151,15 +151,15 @@ class GenreControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'genre1'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'genre2'];
-        $this->json('POST', 'genre/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'genre', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $query = ['api_token' => $token];
-        $this->json('GET', 'genre/index', $query)
+        $this->json('GET', 'genres', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([

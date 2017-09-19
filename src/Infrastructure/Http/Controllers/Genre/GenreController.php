@@ -4,10 +4,12 @@ namespace Uma\Infrastructure\Http\Controllers\Genre;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Uma\Domain\Exceptions\DomainException;
+use Uma\Domain\Exceptions\NoResourceException;
+use Uma\Domain\Model\Actor;
 use Uma\Domain\Model\ActorRepository;
 use Uma\Domain\Model\Genre;
 use Uma\Domain\Model\GenreRepository;
+use Uma\Domain\Model\Movie;
 use Uma\Domain\Model\MovieRepository;
 use Uma\Infrastructure\Http\Controllers\Controller;
 
@@ -48,9 +50,30 @@ class GenreController extends Controller
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Post(
+     *     path="/genre",
+     *     tags={"genre"},
+     *     operationId="createGenre",
+     *     summary="Creates a new genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function create(Request $request)
     {
@@ -61,12 +84,35 @@ class GenreController extends Controller
             $genre = new Genre($request->post('name'));
             $this->genreRepository->add($genre);
         });
+
+        return response('', Response::HTTP_CREATED);
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Delete(
+     *     path="/genre",
+     *     tags={"genre"},
+     *     operationId="removeGenre",
+     *     summary="Removes a genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function remove(Request $request)
     {
@@ -74,21 +120,45 @@ class GenreController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $genre = $this->genreRepository->showByName($request->post('name'));
-
-            if ($genre === null)
-            {
-                throw new DomainException('Genre does not exist');
-            }
-
+            $genre = $this->findGenre($request->post('name'));
             $this->genreRepository->remove($genre);
         });
+
+        return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Put(
+     *     path="/genre/actor",
+     *     tags={"genre"},
+     *     operationId="addActorToGenre",
+     *     summary="Adds an actor to the genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Name of the actor",
+     *         in="formData",
+     *         name="actor",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function addActor(Request $request)
     {
@@ -96,28 +166,46 @@ class GenreController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $genre = $this->genreRepository->showByName($request->post('name'));
-
-            if ($genre === null)
-            {
-                throw new DomainException('Genre does not exist');
-            }
-
-            $actor = $this->actorRepository->showByName($request->post('actor'));
-
-            if ($actor === null)
-            {
-                throw new DomainException('Actor does not exist');
-            }
-
+            $genre = $this->findGenre($request->post('name'));
+            $actor = $this->findActor($request->post('actor'));
             $genre->addActor($actor);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Put(
+     *     path="/genre/movie",
+     *     tags={"genre"},
+     *     operationId="addMovieToGenre",
+     *     summary="Adds a movie to the genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Name of the movie",
+     *         in="formData",
+     *         name="movie",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function addMovie(Request $request)
     {
@@ -125,28 +213,46 @@ class GenreController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $genre = $this->genreRepository->showByName($request->post('name'));
-
-            if ($genre === null)
-            {
-                throw new DomainException('Genre does not exist');
-            }
-
-            $movie = $this->movieRepository->showByName($request->post('movie'));
-
-            if ($movie === null)
-            {
-                throw new DomainException('Movie does not exist');
-            }
-
+            $genre = $this->findGenre($request->post('name'));
+            $movie = $this->findMovie($request->post('movie'));
             $genre->addMovie($movie);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Delete(
+     *     path="/genre/actor",
+     *     tags={"genre"},
+     *     operationId="removeActorFromGenre",
+     *     summary="Removes an actor from a genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Name of the actor",
+     *         in="formData",
+     *         name="actor",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function removeActor(Request $request)
     {
@@ -154,28 +260,46 @@ class GenreController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $genre = $this->genreRepository->showByName($request->post('name'));
-
-            if ($genre === null)
-            {
-                throw new DomainException('Genre does not exist');
-            }
-
-            $actor = $this->actorRepository->showByName($request->post('actor'));
-
-            if ($actor === null)
-            {
-                throw new DomainException('Actor does not exist');
-            }
-
+            $genre = $this->findGenre($request->post('name'));
+            $actor = $this->findActor($request->post('actor'));
             $genre->removeActor($actor);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * TODO: swagger doc here I think
+     * @SWG\Delete(
+     *     path="/genre/movie",
+     *     tags={"genre"},
+     *     operationId="removeMovieFromGenre",
+     *     summary="Removes a movie from a genre",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Name of the movie",
+     *         in="formData",
+     *         name="movie",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function removeMovie(Request $request)
     {
@@ -183,26 +307,36 @@ class GenreController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $genre = $this->genreRepository->showByName($request->post('name'));
-
-            if ($genre === null)
-            {
-                throw new DomainException('Genre does not exist');
-            }
-
-            $movie = $this->movieRepository->showByName($request->post('movie'));
-
-            if ($movie === null)
-            {
-                throw new DomainException('Movie does not exist');
-            }
-
+            $genre = $this->findGenre($request->post('name'));
+            $movie = $this->findMovie($request->post('movie'));
             $genre->removeMovie($movie);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * Queries an Genre by name.
+     * @SWG\Get(
+     *     path="/genre",
+     *     tags={"genre"},
+     *     operationId="getGenre",
+     *     summary="Retrieves a genre by name",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
      *
      * @param Request $request
      * @return Response
@@ -210,22 +344,92 @@ class GenreController extends Controller
     public function show(Request $request)
     {
         $this->validate($request, ['name' => 'required|string']);
-        $genre = $this->genreRepository->showByName($request->post('name'));
-
-        if ($genre === null)
-        {
-            throw new DomainException('Genre does not exist');
-        }
-
+        $genre = $this->findGenre($request->post('name'));
         return response(json_encode($genre), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Get(
+     *     path="/genres",
+     *     tags={"genre"},
+     *     operationId="getGenres",
+     *     summary="Retrieves all genres",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the genre",
+     *         in="formData",
+     *         name="name",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     * )
+     *
+     * @return Response
      */
     public function index()
     {
         $genres = $this->genreRepository->index();
         return response(json_encode($genres), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * Attempts to find the actor by name.
+     *
+     * @param string $name
+     * @return Actor
+     */
+    private function findActor(string $name): Actor
+    {
+        $actor = $this->actorRepository->showByName($name);
+
+        if ($actor === null)
+        {
+            throw new NoResourceException('Actor does not exist');
+        }
+
+        return $actor;
+    }
+
+    /**
+     * Attempts to find the movie by name.
+     *
+     * @param string $name
+     * @return Movie
+     */
+    private function findMovie(string $name): Movie
+    {
+        $movie = $this->movieRepository->showByName($name);
+
+        if ($movie === null)
+        {
+            throw new NoResourceException('Movie does not exist');
+        }
+
+        return $movie;
+    }
+
+    /**
+     * Attempts to find the genre by name.
+     *
+     * @param string $name
+     * @return Genre
+     */
+    private function findGenre(string $name): Genre
+    {
+        $genre = $this->genreRepository->showByName($name);
+
+        if ($genre === null)
+        {
+            throw new NoResourceException('Genre does not exist');
+        }
+
+        return $genre;
     }
 }
