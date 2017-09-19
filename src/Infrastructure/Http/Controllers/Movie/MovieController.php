@@ -157,7 +157,7 @@ class MovieController extends Controller
      *         in="formData",
      *         name="rating",
      *         required=false,
-     *         type="int"
+     *         type="integer"
      *     ),
      *     @SWG\Parameter(
      *         description="Description of the movie",
@@ -363,7 +363,7 @@ class MovieController extends Controller
     }
 
     /**
-     *  @SWG\Get(
+     * @SWG\Get(
      *     path="/movies",
      *     tags={"movie"},
      *     operationId="getMovies",
