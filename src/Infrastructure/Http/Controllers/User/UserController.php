@@ -4,7 +4,6 @@ namespace Uma\Infrastructure\Http\Controllers\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Uma\Domain\Exceptions\DomainException;
 use Uma\Domain\Exceptions\NoResourceException;
 use Uma\Domain\Model\Movie;
 use Uma\Domain\Model\MovieRepository;

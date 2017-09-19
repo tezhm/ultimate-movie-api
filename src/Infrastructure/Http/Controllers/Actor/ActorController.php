@@ -5,7 +5,7 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Uma\Domain\Exceptions\DomainException;
+use Uma\Domain\Exceptions\NoResourceException;
 use Uma\Domain\Model\Actor;
 use Uma\Domain\Model\ActorRepository;
 use Uma\Infrastructure\Http\Controllers\Controller;
@@ -66,6 +66,7 @@ class ActorController extends Controller
      * )
      *
      * @param Request $request
+     * @return Response
      */
     public function create(Request $request)
     {
@@ -79,6 +80,8 @@ class ActorController extends Controller
             );
             $this->actorRepository->add($actor);
         });
+
+        return response('', Response::HTTP_CREATED);
     }
 
     /**
@@ -105,6 +108,7 @@ class ActorController extends Controller
      * )
      *
      * @param Request $request
+     * @return Response
      */
     public function remove(Request $request)
     {
@@ -112,15 +116,11 @@ class ActorController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $actor = $this->actorRepository->showByName($request->post('name'));
-
-            if ($actor === null)
-            {
-                throw new DomainException('Actor does not exist');
-            }
-
+            $actor = $this->findActor($request->post('name'));
             $this->actorRepository->remove($actor);
         });
+
+        return response('', Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -170,6 +170,7 @@ class ActorController extends Controller
      * )
      *
      * @param Request $request
+     * @return Response
      */
     public function change(Request $request)
     {
@@ -177,12 +178,7 @@ class ActorController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $actor = $this->actorRepository->showByName($request->post('name'));
-
-            if ($actor === null)
-            {
-                throw new DomainException('Actor does not exist');
-            }
+            $actor = $this->findActor($request->post('name'));
 
             if ($request->has('birth'))
             {
@@ -199,6 +195,8 @@ class ActorController extends Controller
                 $actor->setImage($request->post('image'));
             }
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
@@ -230,13 +228,7 @@ class ActorController extends Controller
     public function show(Request $request)
     {
         $this->validate($request, ['name' => 'required|string']);
-        $actor = $this->actorRepository->showByName($request->post('name'));
-
-        if ($actor === null)
-        {
-            throw new DomainException('Actor does not exist');
-        }
-
+        $actor = $this->findActor($request->post('name'));
         return response(json_encode($actor), Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 
@@ -262,10 +254,30 @@ class ActorController extends Controller
      *     ),
      *     security={{"uma_auth":{"write:actors", "read:actors"}}}
      * )
+     *
+     * @return Response
      */
     public function index()
     {
         $actors = $this->actorRepository->index();
         return response(json_encode($actors), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * Attempts to find the actor by name.
+     *
+     * @param string $name
+     * @return Actor
+     */
+    private function findActor(string $name): Actor
+    {
+        $actor = $this->actorRepository->showByName($name);
+
+        if ($actor === null)
+        {
+            throw new NoResourceException('Actor does not exist');
+        }
+
+        return $actor;
     }
 }

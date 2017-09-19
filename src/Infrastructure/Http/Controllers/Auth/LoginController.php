@@ -2,9 +2,9 @@
 namespace Uma\Infrastructure\Http\Controllers\Auth;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Factory as Auth;
 use Illuminate\Http\Response;
 use Uma\Domain\Model\User;
 use Uma\Infrastructure\Http\Controllers\Controller;
