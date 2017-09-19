@@ -73,8 +73,8 @@ class UserController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
      *     ),
      *     security={{"uma_auth":{"write:users", "read:users"}}}
      * )
@@ -122,8 +122,8 @@ class UserController extends Controller
      *     consumes={"application/json"},
      *     produces={"application/json"},
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
      *     ),
      *     security={{"uma_auth":{"write:users", "read:users"}}}
      * )
@@ -167,8 +167,16 @@ class UserController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=201,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:users", "read:users"}}}
      * )
@@ -209,8 +217,16 @@ class UserController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:users", "read:users"}}}
      * )
@@ -250,8 +266,8 @@ class UserController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
      *     ),
      *     security={{"uma_auth":{"write:users", "read:users"}}}
      * )
@@ -284,10 +300,15 @@ class UserController extends Controller
      *     consumes={"application/json"},
      *     produces={"application/json"},
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation",
+     *         @SWG\Schema(ref="#/definitions/User")
      *     ),
-     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     security={{"uma_auth":{"read:users"}}}
      * )
      *
      * @param Request $request

@@ -66,8 +66,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=201,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -105,8 +113,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=204,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -151,8 +167,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -198,8 +222,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -245,8 +277,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -292,8 +332,16 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=422,
+     *         description="failed validation"
      *     ),
      *     security={{"uma_auth":{"write:genres", "read:genres"}}}
      * )
@@ -332,10 +380,15 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation",
+     *         @SWG\Schema(ref="#/definitions/Genre")
      *     ),
-     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     *     @SWG\Response(
+     *         response=404,
+     *         description="resource not found"
+     *     ),
+     *     security={{"uma_auth":{"read:genres"}}}
      * )
      *
      * @param Request $request
@@ -365,10 +418,14 @@ class GenreController extends Controller
      *         type="string"
      *     ),
      *     @SWG\Response(
-     *         response=405,
-     *         description="Invalid input",
+     *         response=200,
+     *         description="successful operation",
+     *         @SWG\Schema(
+     *             type="array",
+     *             @SWG\Items(ref="#/definitions/Genre")
+     *         ),
      *     ),
-     *     security={{"uma_auth":{"write:genres", "read:genres"}}}
+     *     security={{"uma_auth":{"read:genres"}}}
      * )
      *
      * @return Response
