@@ -18,8 +18,8 @@ class UserControllerTest extends LumenTest
     public function testCreate()
     {
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $this->json('POST', 'user/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'user', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
         $response = $this->json('POST', 'login', $command)
@@ -29,7 +29,7 @@ class UserControllerTest extends LumenTest
         $token = json_decode($response->getContent(), true)['api_token'];
 
         $query = ['api_token' => $token];
-        $this->json('GET', 'user/show', $query)
+        $this->json('GET', 'user', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson(['username' => 'newuser', 'favourites' => []]);
@@ -40,8 +40,8 @@ class UserControllerTest extends LumenTest
         $movies = $this->seedMovies();
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $this->json('POST', 'user/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'user', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
         $response = $this->json('POST', 'login', $command)
@@ -51,15 +51,15 @@ class UserControllerTest extends LumenTest
         $token = json_decode($response->getContent(), true)['api_token'];
 
         $command = ['api_token' => $token, 'movie' => $movies[0]];
-        $this->json('POST', 'user/add/favourite', $command)
+        $this->json('PUT', 'user/favourite', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'movie' => $movies[1]];
-        $this->json('POST', 'user/add/favourite', $command)
+        $this->json('PUT', 'user/favourite', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token];
-        $this->json('GET', 'user/show', $query)
+        $this->json('GET', 'user', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson(['username' => 'newuser', 'favourites' => $movies]);
@@ -70,8 +70,8 @@ class UserControllerTest extends LumenTest
         $movies = $this->seedMovies();
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $this->json('POST', 'user/create', $command)
-            ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'user', $command)
+            ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
         $response = $this->json('POST', 'login', $command)
@@ -81,15 +81,15 @@ class UserControllerTest extends LumenTest
         $token = json_decode($response->getContent(), true)['api_token'];
 
         $command = ['api_token' => $token, 'movie' => $movies[0]];
-        $this->json('POST', 'user/add/favourite', $command)
+        $this->json('PUT', 'user/favourite', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'movie' => $movies[0]];
-        $this->json('POST', 'user/remove/favourite', $command)
+        $this->json('DELETE', 'user/favourite', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token];
-        $this->json('GET', 'user/show', $query)
+        $this->json('GET', 'user', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJson(['username' => 'newuser', 'favourites' => []]);

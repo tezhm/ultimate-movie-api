@@ -16,10 +16,10 @@ $router->post('login', ['uses' => 'Auth\LoginController@login']);
 $router->post('logout', ['uses' => 'Auth\LoginController@logout']);
 
 // User
-$router->post('user/create', ['uses' => 'User\UserController@create']);
-$router->post('user/add/favourite', ['uses' => 'User\UserController@addFavourite', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('user/remove/favourite', ['uses' => 'User\UserController@removeFavourite', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('user/show', ['uses' => 'User\UserController@show', 'middleware' => ['auth', 'throttle:60']]);
+$router->post('user', ['uses' => 'User\UserController@create']);
+$router->put('user/favourite', ['uses' => 'User\UserController@addFavourite', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('user/favourite', ['uses' => 'User\UserController@removeFavourite', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('user', ['uses' => 'User\UserController@show', 'middleware' => ['auth', 'throttle:60']]);
 
 // Actor
 $router->post('actor', ['uses' => 'Actor\ActorController@create', 'middleware' => ['auth', 'throttle:60']]);

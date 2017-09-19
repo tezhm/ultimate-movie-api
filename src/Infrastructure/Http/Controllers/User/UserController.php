@@ -5,6 +5,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Uma\Domain\Exceptions\DomainException;
+use Uma\Domain\Exceptions\NoResourceException;
+use Uma\Domain\Model\Movie;
 use Uma\Domain\Model\MovieRepository;
 use Uma\Domain\Model\User;
 use Uma\Domain\Model\UserRepository;
@@ -42,9 +44,37 @@ class UserController extends Controller
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Post(
+     *     path="/user",
+     *     tags={"user"},
+     *     operationId="createUser",
+     *     summary="Creates a new user",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Username of the user",
+     *         in="formData",
+     *         name="username",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Password of the user",
+     *         in="formData",
+     *         name="password",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function create(Request $request)
     {
@@ -58,12 +88,35 @@ class UserController extends Controller
             );
             $this->userRepository->add($user);
         });
+
+        return response('', Response::HTTP_CREATED);
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Put(
+     *     path="/user/favourite",
+     *     tags={"user"},
+     *     operationId="addFavouriteToUser",
+     *     summary="Adds a movie as a favourite for current user",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the movie",
+     *         in="formData",
+     *         name="movie",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function addFavourite(Request $request)
     {
@@ -71,23 +124,40 @@ class UserController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $movie = $this->movieRepository->showByName($request->post('movie'));
-
-            if ($movie === null)
-            {
-                throw new DomainException('Movie does not exist');
-            }
-
+            $movie = $this->findMovie($request->post('movie'));
             /** @var User $user */
             $user = $request->user('api');
             $user->addFavourite($movie);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Delete(
+     *     path="/user/favourite",
+     *     tags={"user"},
+     *     operationId="removeFavouriteFromUser",
+     *     summary="Removes a movie as a favourite from current user",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Name of the movie",
+     *         in="formData",
+     *         name="movie",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
      *
      * @param Request $request
+     * @return Response
      */
     public function removeFavourite(Request $request)
     {
@@ -95,21 +165,30 @@ class UserController extends Controller
 
         $this->entityManager->transactional(function() use($request)
         {
-            $movie = $this->movieRepository->showByName($request->post('movie'));
-
-            if ($movie === null)
-            {
-                throw new DomainException('Movie does not exist');
-            }
-
+            $movie = $this->findMovie($request->post('movie'));
             /** @var User $user */
             $user = $request->user('api');
             $user->removeFavourite($movie);
         });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**
-     * TODO: swagger documentation
+     * @SWG\Get(
+     *     path="/user",
+     *     tags={"user"},
+     *     operationId="getUser",
+     *     summary="Gets the current user information",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
      *
      * @param Request $request
      * @return Response
@@ -118,5 +197,23 @@ class UserController extends Controller
     {
         $user = $request->user('api');
         return response(json_encode($user), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * Attempts to find the movie by name.
+     *
+     * @param string $name
+     * @return Movie
+     */
+    private function findMovie(string $name): Movie
+    {
+        $movie = $this->movieRepository->showByName($name);
+
+        if ($movie === null)
+        {
+            throw new NoResourceException('Movie does not exist');
+        }
+
+        return $movie;
     }
 }
