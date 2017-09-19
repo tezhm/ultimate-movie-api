@@ -2,6 +2,8 @@
 namespace Uma\Infrastructure\Http\Controllers\User;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Uma\Domain\Exceptions\NoResourceException;
@@ -18,6 +20,8 @@ use Uma\Infrastructure\Http\Controllers\Controller;
  */
 class UserController extends Controller
 {
+    /** @var Auth */
+    private $auth;
     /** @var EntityManagerInterface */
     private $entityManager;
     /** @var UserRepository */
@@ -28,18 +32,115 @@ class UserController extends Controller
     /**
      * Create a new user controller instance.
      *
+     * @param Auth                   $auth
      * @param EntityManagerInterface $entityManager
      * @param UserRepository         $userRepository
      * @param MovieRepository        $movieRepository
      */
     public function __construct(
+        Auth $auth,
         EntityManagerInterface $entityManager,
         UserRepository $userRepository,
         MovieRepository $movieRepository)
     {
+        $this->auth = $auth;
         $this->entityManager = $entityManager;
         $this->userRepository = $userRepository;
         $this->movieRepository = $movieRepository;
+    }
+
+    /**
+     * @SWG\Post(
+     *     path="/user/login",
+     *     tags={"user"},
+     *     operationId="loginUser",
+     *     summary="Logs in as user",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Parameter(
+     *         description="Username of the user",
+     *         in="formData",
+     *         name="username",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Parameter(
+     *         description="Password of the user",
+     *         in="formData",
+     *         name="password",
+     *         required=true,
+     *         type="string"
+     *     ),
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function login(Request $request)
+    {
+        $this->validate($request, ['username' => 'required', 'password' => 'required']);
+
+        $credentials = [
+            'username' => $request->post('username'),
+            'password' => $request->post('password')
+        ];
+
+        /** @var StatefulGuard $guard */
+        $guard = $this->auth->guard('web');
+
+        if (!$guard->attempt($credentials))
+        {
+            return response(null, Response::HTTP_UNAUTHORIZED);
+        }
+
+        $token = null;
+        $this->entityManager->transactional(function() use($guard, &$token)
+        {
+            /** @var User $user */
+            $user = $guard->user();
+            $user->generateApiToken();
+            $token = $user->getApiToken();
+        });
+
+        $response = ['api_token' => $token];
+        return response(json_encode($response), Response::HTTP_OK, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * @SWG\Post(
+     *     path="/user/logout",
+     *     tags={"user"},
+     *     operationId="logoutUser",
+     *     summary="Logs out current user",
+     *     description="",
+     *     consumes={"application/json"},
+     *     produces={"application/json"},
+     *     @SWG\Response(
+     *         response=405,
+     *         description="Invalid input",
+     *     ),
+     *     security={{"uma_auth":{"write:users", "read:users"}}}
+     * )
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function logout(Request $request)
+    {
+        $this->entityManager->transactional(function() use($request)
+        {
+            /** @var User $user */
+            $user = $request->user('api');
+            $user->clearApiToken();
+        });
+
+        return response('', Response::HTTP_OK);
     }
 
     /**

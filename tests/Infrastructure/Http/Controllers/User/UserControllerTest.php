@@ -22,7 +22,7 @@ class UserControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $response = $this->json('POST', 'login', $command)
+        $response = $this->json('POST', 'user/login', $command)
                          ->seeStatusCode(Response::HTTP_OK)
                          ->response;
 
@@ -44,7 +44,7 @@ class UserControllerTest extends LumenTest
              ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $response = $this->json('POST', 'login', $command)
+        $response = $this->json('POST', 'user/login', $command)
                          ->seeStatusCode(Response::HTTP_OK)
                          ->response;
 
@@ -74,7 +74,7 @@ class UserControllerTest extends LumenTest
             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['username' => 'newuser', 'password' => 'password123'];
-        $response = $this->json('POST', 'login', $command)
+        $response = $this->json('POST', 'user/login', $command)
                          ->seeStatusCode(Response::HTTP_OK)
                          ->response;
 

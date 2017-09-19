@@ -54,6 +54,14 @@ class User extends PersistentId implements Authenticatable, JsonSerializable
     }
 
     /**
+     * Clears the current API token.
+     */
+    public function clearApiToken()
+    {
+        $this->api_token = null;
+    }
+
+    /**
      * Returns the last generated API token.
      *
      * @return string|null

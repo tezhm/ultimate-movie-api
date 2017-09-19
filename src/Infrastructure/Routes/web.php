@@ -11,12 +11,10 @@
 |
 */
 
-// Authentication
-$router->post('login', ['uses' => 'Auth\LoginController@login']);
-$router->post('logout', ['uses' => 'Auth\LoginController@logout']);
-
 // User
 $router->post('user', ['uses' => 'User\UserController@create']);
+$router->post('user/login', ['uses' => 'User\UserController@login']);
+$router->post('user/logout', ['uses' => 'User\UserController@logout']);
 $router->put('user/favourite', ['uses' => 'User\UserController@addFavourite', 'middleware' => ['auth', 'throttle:60']]);
 $router->delete('user/favourite', ['uses' => 'User\UserController@removeFavourite', 'middleware' => ['auth', 'throttle:60']]);
 $router->get('user', ['uses' => 'User\UserController@show', 'middleware' => ['auth', 'throttle:60']]);

@@ -108,6 +108,17 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($testClass->getApiToken());
     }
 
+    public function testClearApiToken()
+    {
+        $this->expectsHash('password123', 'hashedpassword');
+
+        $testClass = new User("potatoooo", 'password123');
+        $testClass->generateApiToken();
+        $testClass->clearApiToken();
+
+        $this->assertNull($testClass->getApiToken());
+    }
+
     public function testAddFavourite()
     {
         /** @var Movie[] $fixtures */
