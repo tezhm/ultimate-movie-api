@@ -23,11 +23,11 @@ class ActorControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
-        $this->json('POST', 'actor/create', $command)
+        $this->json('POST', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new actor'];
-        $this->json('GET', 'actor/show', $query)
+        $this->json('GET', 'actor/showByName', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -44,15 +44,15 @@ class ActorControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
-        $this->json('POST', 'actor/create', $command)
+        $this->json('POST', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new actor'];
-        $this->json('POST', 'actor/remove', $command)
+        $this->json('DELETE', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new actor'];
-        $this->json('GET', 'actor/show', $query)
+        $this->json('GET', 'actor/showByName', $query)
              ->seeStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
@@ -61,7 +61,7 @@ class ActorControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new actor', 'birth' => (new DateTime('now'))->format(DateTime::ATOM)];
-        $this->json('POST', 'actor/create', $command)
+        $this->json('POST', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = [
@@ -71,11 +71,11 @@ class ActorControllerTest extends LumenTest
             'bio' => 'this is a bio',
             'image' => 'im not really an image lol'
         ];
-        $this->json('POST', 'actor/change', $command)
+        $this->json('PUT', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new actor'];
-        $this->json('GET', 'actor/show', $query)
+        $this->json('GET', 'actor/showByName', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -92,11 +92,11 @@ class ActorControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'actor1', 'birth' => '2017-09-17T02:24:16+00:00'];
-        $this->json('POST', 'actor/create', $command)
+        $this->json('POST', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'actor2', 'birth' => '2017-09-17T02:23:16+00:00'];
-        $this->json('POST', 'actor/create', $command)
+        $this->json('POST', 'actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token];

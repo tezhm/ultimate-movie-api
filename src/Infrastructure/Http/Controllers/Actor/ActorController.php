@@ -241,7 +241,7 @@ class ActorController extends Controller
     }
 
     /**
-     * @SWG\Put(
+     * @SWG\Get(
      *     path="/actor/index",
      *     tags={"actor"},
      *     operationId="changeActor",
