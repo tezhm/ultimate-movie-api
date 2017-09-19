@@ -39,10 +39,10 @@ $router->get('genre', ['uses' => 'Genre\GenreController@show', 'middleware' => [
 $router->get('genres', ['uses' => 'Genre\GenreController@index', 'middleware' => ['auth', 'throttle:60']]);
 
 // Movie
-$router->post('movie/create', ['uses' => 'Movie\MovieController@create', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('movie/remove', ['uses' => 'Movie\MovieController@remove', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('movie/change', ['uses' => 'Movie\MovieController@change', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('movie/add/actor', ['uses' => 'Movie\MovieController@addActor', 'middleware' => ['auth', 'throttle:60']]);
-$router->post('movie/remove/actor', ['uses' => 'Movie\MovieController@removeActor', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('movie/show', ['uses' => 'Movie\MovieController@show', 'middleware' => ['auth', 'throttle:60']]);
-$router->get('movie/index', ['uses' => 'Movie\MovieController@index', 'middleware' => ['auth', 'throttle:60']]);
+$router->post('movie', ['uses' => 'Movie\MovieController@create', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('movie', ['uses' => 'Movie\MovieController@remove', 'middleware' => ['auth', 'throttle:60']]);
+$router->put('movie', ['uses' => 'Movie\MovieController@change', 'middleware' => ['auth', 'throttle:60']]);
+$router->put('movie/actor', ['uses' => 'Movie\MovieController@addActor', 'middleware' => ['auth', 'throttle:60']]);
+$router->delete('movie/actor', ['uses' => 'Movie\MovieController@removeActor', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('movie', ['uses' => 'Movie\MovieController@show', 'middleware' => ['auth', 'throttle:60']]);
+$router->get('movies', ['uses' => 'Movie\MovieController@index', 'middleware' => ['auth', 'throttle:60']]);

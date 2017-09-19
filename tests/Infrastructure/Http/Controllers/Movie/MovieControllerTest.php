@@ -23,11 +23,11 @@ class MovieControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('GET', 'movie/show', $query)
+        $this->json('GET', 'movie', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -45,16 +45,16 @@ class MovieControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/remove', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('DELETE', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_NO_CONTENT);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('GET', 'movie/show', $query)
-             ->seeStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->json('GET', 'movie', $query)
+             ->seeStatusCode(Response::HTTP_NOT_FOUND);
     }
 
     public function testChange()
@@ -63,8 +63,8 @@ class MovieControllerTest extends LumenTest
         $genre = $this->seedGenre();
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = [
             'api_token' => $token,
@@ -74,11 +74,11 @@ class MovieControllerTest extends LumenTest
             'description' => 'an auto-biography of documentary documenters',
             'image' => 'this is an image 4relz',
         ];
-        $this->json('POST', 'movie/change', $command)
+        $this->json('PUT', 'movie', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('GET', 'movie/show', $query)
+        $this->json('GET', 'movie', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -97,19 +97,19 @@ class MovieControllerTest extends LumenTest
         $actors = $this->seedActors();
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new movie', 'actor' => $actors[0], 'character' => 'megatron'];
-        $this->json('POST', 'movie/add/actor', $command)
+        $this->json('PUT', 'movie/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new movie', 'actor' => $actors[1], 'character' => 'optimus prime'];
-        $this->json('POST', 'movie/add/actor', $command)
+        $this->json('PUT', 'movie/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('GET', 'movie/show', $query)
+        $this->json('GET', 'movie', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -128,19 +128,19 @@ class MovieControllerTest extends LumenTest
         $actors = $this->seedActors();
 
         $command = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'new movie', 'actor' => $actors[0], 'character' => 'megatron'];
-        $this->json('POST', 'movie/add/actor', $command)
+        $this->json('PUT', 'movie/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $command = ['api_token' => $token, 'name' => 'new movie', 'actor' => $actors[0]];
-        $this->json('POST', 'movie/remove/actor', $command)
+        $this->json('DELETE', 'movie/actor', $command)
              ->seeStatusCode(Response::HTTP_OK);
 
         $query = ['api_token' => $token, 'name' => 'new movie'];
-        $this->json('GET', 'movie/show', $query)
+        $this->json('GET', 'movie', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
@@ -158,15 +158,15 @@ class MovieControllerTest extends LumenTest
         $token = $this->generateToken();
 
         $command = ['api_token' => $token, 'name' => 'movie1'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $command = ['api_token' => $token, 'name' => 'movie2'];
-        $this->json('POST', 'movie/create', $command)
-             ->seeStatusCode(Response::HTTP_OK);
+        $this->json('POST', 'movie', $command)
+             ->seeStatusCode(Response::HTTP_CREATED);
 
         $query = ['api_token' => $token];
-        $this->json('GET', 'movie/index', $query)
+        $this->json('GET', 'movies', $query)
              ->seeStatusCode(Response::HTTP_OK)
              ->seeHeader('Content-Type', 'application/json')
              ->seeJsonEquals([
