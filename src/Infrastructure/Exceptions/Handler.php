@@ -2,11 +2,14 @@
 namespace Uma\Infrastructure\Exceptions;
 
 use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Uma\Domain\Exceptions\DomainException;
+use Uma\Domain\Exceptions\NoResourceException;
 
 class Handler extends ExceptionHandler
 {
@@ -44,6 +47,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+        switch (get_class($e))
+        {
+            case DomainException::class:
+                return response($e->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            case NoResourceException::class:
+                return response($e->getMessage(), Response::HTTP_NOT_FOUND);
+            default:
+                return parent::render($request, $e);
+        }
     }
 }
